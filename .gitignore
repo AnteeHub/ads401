@@ -1,0 +1,18 @@
+# Local drafts and temporary assets
+*.tmp
+*.local
+*.draft
+*.bundle
+
+# Slidev & build outputs
+slides/
+dist/
+node_modules/
+.output/
+
+# OS & editor metadata
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
