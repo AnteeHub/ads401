@@ -125,12 +125,12 @@ repository (`assets/pre2/materials/`); the slide-deck inventory matches it:
 
 | Material | Status |
 |---|---|
-| Questionnaire v1 (pilot version) | Available — labelled for pilot testing |
+| [Questionnaire v2 (live deployment instruments)](https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2.md) | Available — fielded on Tally (EN primary + CN mirror) |
 | [Survey routing (flow source + diagram)](https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v1_flow.md) | Available |
 | Participant information & consent (survey intro + Q1–Q2) | Available — operational details to confirm |
-| Optional interview recruitment (Q20–Q21) | Available |
+| Optional interview recruitment (Q26–Q27) | Available |
 | References (six entries) | Available |
-| Interview guide & interview consent | **Pending** — to be supplied and confirmed before interviewing |
+| Interview guide & interview consent | **In review** — semi-structured guide drafted and under team review |
 | Internal-check & pilot record | **Pending** — logged after the four-researcher questionnaire check |
 
 ### Variables and measures
@@ -181,7 +181,8 @@ scales.
 ### Qualitative (interviews) and integration
 
 - **Sampling:** purposive, among survey respondents who opt into follow-up
-  contact (Q20–Q21), informed by initial survey analysis; about 4–6 students,
+  contact (Q26–Q27), informed by initial survey analysis; 7 students
+  interviewed (November 2026; transcription and analysis in progress),
   prioritising G1 (Both AI) and G2 (Other AI Only).
 - **Format:** semi-structured, 15–20 minutes; focus on tool-choice
   motivations, adoption barriers and learning experiences.
@@ -198,17 +199,19 @@ scales.
 ### Next steps
 
 Research materials → internal questionnaire check (4 researchers) → survey
-data collection → preliminary survey analysis → follow-up interviews →
+data collection (in progress — English and Chinese instruments live on Tally,
+November 2026) → preliminary survey analysis → follow-up interviews →
 thematic analysis & integration. The achieved sample is reported after
 collection; findings on this page remain pending until then.
 
 ## 6. Findings
 
-*Pending — survey not yet fielded.* Data collection starts after Presentation
-2 feedback and the instrument pilot. This section will present, per research
-question: awareness and adoption rates (RQ1), usage-pattern cross-tabulations
-by group (RQ2), and barrier/intention/comparison summaries with interview
-themes (RQ3) — with figures, exact denominators and anonymised quotes.
+*Pending — data collection in progress; findings pending collection close.*
+Online survey instruments (English and Chinese) are currently fielded on
+Tally. This section will present, per research question: awareness and adoption
+rates (RQ1), usage-pattern cross-tabulations by group (RQ2), and barrier/intention/comparison
+summaries with interview themes (RQ3) — with figures, exact denominators and
+anonymised quotes once collection concludes.
 
 ## 7. Discussion, limitations and recommendations (planned)
 

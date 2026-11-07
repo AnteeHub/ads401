@@ -78,8 +78,8 @@ Usefulness and ease-of-use items are treated as exploratory, context-specific me
 ### Semi-structured Interviews
 - Sampling: Purposive sampling among survey respondents who opt into follow-up contact, informed by initial survey analysis.
 > 抽样方法：初步分析问卷后，在同意后续联系的受访者中进行目的性抽样。
-- Participants: about 4–6 students, **prioritising students in 2 groups (Both AI / Other AI Only)**.
-> 参与者：约 4–6 名，重点关注使用两种 AI 和只使用其他 AI 分组的学生。
+- Participants: 7 students interviewed (November 2026; transcriptions and analysis in progress), **prioritising students in 2 groups (Both AI / Other AI Only)**.
+> 参与者：已访谈 7 名（2026年11月；转录与分析进行中），重点关注使用两种 AI 和只使用其他 AI 分组的学生。
 - Duration: 15–20 minutes per interview.
 > 访谈时长：每人 15–20 分钟。
 - Focus: Tool-choice motivations, adoption barriers, and learning experiences.
@@ -103,8 +103,11 @@ Research Materials → Internal Questionnaire Check (4 researchers) → Survey D
 *References — Interview coding and theme development: Braun & Clarke (2006), [Using thematic analysis in psychology](https://doi.org/10.1191/1478088706qp063oa); connecting survey-based sampling, interview design, and interpretation: Fetters et al. (2013), [Achieving integration in mixed methods designs—Principles and practices](https://doi.org/10.1111/1475-6773.12117).*
 
 ## Materials
-Survey material: questionnaire_v2.md with English and Chinese variants under `assets/pre2/materials/survey/` (deployment version, updated per issue #22 review); questionnaire_v1.md retained as the earlier draft.
-> 问卷材料：`assets/pre2/materials/survey/` 下的 questionnaire_v2.md 及英文/中文单语版（部署版本，按 issue #22 评审更新）；questionnaire_v1.md 留作早期草稿。
+Survey material: `questionnaire_v2.md` with English and Chinese variants under `assets/pre2/materials/survey/` (live 9-page, 27-question deployment instruments synced directly from Tally forms `xVXO6r` and `4a45br`); `questionnaire_v1.md` retained as the earlier draft.
+> 问卷材料：`assets/pre2/materials/survey/` 下的 `questionnaire_v2.md` 及中英文版（与线上 Tally 表单 `xVXO6r` 与 `4a45br` 实时同步的 9 页 27 题部署版本）；`questionnaire_v1.md` 留作早期草稿。
+
+Deployment status (November 2026): English primary survey live on Tally (https://tally.so/r/xVXO6r); Chinese mirror live on Tally (https://tally.so/r/4a45br). Data collection is actively in progress; findings will be reported after collection closes.
+> 部署状态（2026年11月）：官方英文主卷已上线 Tally (https://tally.so/r/xVXO6r)；中文镜像卷已上线 Tally (https://tally.so/r/4a45br)。问卷数据收集正在进行中，具体结果将在收集结束后汇报。
 
 ### Limitations
 - Single-module sample

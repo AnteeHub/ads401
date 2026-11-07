@@ -251,7 +251,7 @@ title: Follow-up Interviews & Integrated Analysis
     <div class="col-h">Semi-structured Interviews</div>
     <div class="kv mt-3">
       <div class="kv-row"><span class="kv-k">Sampling:</span> Purposive sampling of opt-in respondents, informed by initial survey analysis.</div>
-      <div class="kv-row"><span class="kv-k">Participants:</span> About 4–6 students; prioritise Both AI / Other AI Only.</div>
+      <div class="kv-row"><span class="kv-k">Participants:</span> About 7 students; prioritise Both AI / Other AI Only.</div>
       <div class="kv-row"><span class="kv-k">Duration:</span> 15–20 minutes per interview.</div>
       <div class="kv-row"><span class="kv-k">Focus:</span> Tool-choice motivations, adoption barriers, and learning experiences.</div>
     </div>
@@ -278,7 +278,7 @@ Notes [20s] · 追踪访谈与整合分析 (对齐 scripts.md Follow-up Intervie
 "After the survey, // we will conduct semi-structured follow-up interviews — // about four to six students, prioritising Both AI and Other AI Only groups. // Each interview lasts fifteen to twenty minutes, // focusing on tool-choice motivations, adoption barriers, and learning experiences. // We will code the interviews and identify recurring themes, // and connect these themes with survey patterns // to explain adoption decisions."
 
 【中文要义】:
-问卷之后开展半结构化追踪访谈：约 4–6 名学生，重点关注 Both AI 与 Other AI Only 两组，每人 15–20 分钟，聚焦工具选择动机、采纳障碍与学习体验。访谈编码归纳主题，并与问卷结果相互对照，解释采纳决策。
+问卷之后开展半结构化追踪访谈：已访谈约 7 名学生，重点关注 Both AI 与 Other AI Only 两组，每人 15–20 分钟，聚焦工具选择动机、采纳障碍与学习体验。访谈编码归纳主题，并与问卷结果相互对照，解释采纳决策。
 -->
 
 ---
