@@ -40,3 +40,9 @@ Thumbs.db
 .idea/
 .claude/
 skills/
+
+# Interview sensitive data — never commit (ethics: local-only, in-group access)
+docs/transcripts/
+docs/audio/
+docs/*.md
+models/

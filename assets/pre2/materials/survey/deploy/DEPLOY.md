@@ -2,13 +2,14 @@
 
 Deployment records for the ADS401 questionnaire across platforms.
 
-## Official Primary Deployment (Tally — English)
+## Official Primary Deployment (Tally — English & Chinese)
 
 | Platform | Form ID | Fill URL | Architecture | Status |
 |---|---|---|---|---|
 | **Tally (EN)** | `xVXO6r` | **https://tally.so/r/xVXO6r** | 9-Page Streamlined Flow | **PUBLISHED** |
+| **Tally (CN)** | `4a45br` | **https://tally.so/r/4a45br** | 9-Page Streamlined Flow | **PUBLISHED** |
 
-- Verified 27-question instrument with native inline Other inputs, presence-linked evaluation matrices, and ethics information sheet integration.
+- Verified 27-question instrument with native inline Other inputs, presence-linked evaluation matrices, bidirectional mutual exclusion for Q15 notable problems, and ethics information sheet integration across both languages.
 - Full technical specification, validation logs, and audit records: see [`../TALLY_MIGRATION.md`](../TALLY_MIGRATION.md).
 
 ---
