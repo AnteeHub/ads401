@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADS401 · Pre3 — XJTLU AI Data Story</title>
+<meta name="description" content="ADS401 Pre3 interactive data visualization entry (SPA deck). Awareness, adoption and use of XJTLU AI.">
+
+<!-- D3 (v7) — primary visualization library -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+<!-- Font: Inter (matches pre2 flat-academic deck; falls back to system sans) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ════════════════════════════════════════════════════════════════════════
+   THEME TOKENS  (restyle the whole app from this single block)
+   ────────────────────────────────────────────────────────────────────────
+   Extends the pre2 flat-academic deck style
+   (assets/pre2/slides-promt.md + slides/styles/index.css + .agents/skills/slides-style).
+   Palette: white bg · ink #172327 · muted #687780 · hairline #CED5D7 · accent #1683A5.
+   To switch theme: change these variables, or add a `[data-theme="…"]` block.
+   ════════════════════════════════════════════════════════════════════════ */
+:root, [data-theme="light"] {
+  --bg:          #ffffff;
+  --panel:       #ffffff;
+  --ink:         #172327;
+  --ink-strong:  #0d1a1e;
+  --muted:       #687780;
+  --line:        #ced5d7;
+  --accent:      #1683a5;
+  --accent-deep: #183f46;
+  --accent-soft: #eaf3f6;
+  --neg:         #b3403a;
+  --pos:         #1683a5;
+
+  /* G1–G4 group colours (kept identical everywhere they appear) */
+  --g1:          #7c6bb0;   /* G1 Both — violet */
+  --g2:          #c25e4c;   /* G2 External only — terracotta */
+  --g3:          #8d9baa;   /* G3 Neither — grey */
+  --g4:          #1683a5;   /* G4 XJTLU only — teal */
+  --c-xjtu:      #1683a5;   /* XJTLU AI accent */
+  --c-ext:       #c25e4c;   /* External AI accent */
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --fs-h1:  clamp(2rem, 4.5vw, 3.4rem);
+  --fs-h2:  clamp(1.4rem, 2.6vw, 1.85rem);
+  --fs-body: 1.06rem;
+  --fs-small: 0.82rem;
+
+  --content-max: 1200px;
+  --hairline: 1px solid var(--line);
+  --radius: 4px;
+  --shadow: none;
+
+  --ease: cubic-bezier(.4,0,.2,1);
+  --dur: 220ms;
+}
+
+[data-theme="dark"] {
+  --bg: #0b0f14; --panel: #10161f; --ink: #e6ecf7; --ink-strong: #f2f6fc;
+  --muted: #8b95a9; --line: #2a3340; --accent: #22d3ee; --accent-deep: #7dd3fc;
+  --accent-soft: #12222c; --neg: #f43f5e; --pos: #34d399;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   BASE
+   ════════════════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;                 /* deck: no page scroll */
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+button { font: inherit; cursor: pointer; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   DECK SHELL
+   ════════════════════════════════════════════════════════════════════════ */
+.shell {
+  position: relative;
+  display: flex; flex-direction: column;
+  height: 100dvh; min-height: 600px;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 20px 10px;
+}
+
+/* ---- topbar ---- */
+.topbar {
+  height: 62px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  border-bottom: var(--hairline);
+}
+.brand { display: flex; align-items: baseline; gap: 9px; }
+.brand b { font-size: .95rem; font-weight: 800; letter-spacing: -.01em; color: var(--ink-strong); }
+.brand .tag { color: var(--accent-deep); font-weight: 700; }
+.brand small { font-size: .7rem; color: var(--muted); }
+.topright { display: flex; align-items: center; gap: 11px; }
+.capsule { font-size: .66rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); border: 1px solid var(--line); padding: 6px 11px; border-radius: 99px; }
+.capsule.live { color: var(--accent); border-color: var(--accent); }
+.toolbar-btn { border: 1px solid var(--line); background: transparent; color: var(--ink);
+  padding: 7px 12px; font-size: .78rem; border-radius: 6px; }
+.toolbar-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---- main (rail + slideframe) ---- */
+.main { display: flex; gap: 18px; flex: 1; min-height: 0; padding-top: 14px; }
+
+.rail { width: 176px; flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 14px; }
+.rail-head { font-size: .66rem; color: var(--muted); letter-spacing: .18em; text-transform: uppercase; margin: 0 0 10px 10px; }
+.rail-item { border: 1px solid transparent; background: transparent; text-align: left; color: var(--muted);
+  padding: 11px 12px; border-radius: 8px; display: flex; gap: 9px; align-items: center; font-size: .82rem; line-height: 1.3; }
+.rail-item span { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .66rem; }
+.rail-item:hover { background: var(--accent-soft); color: var(--ink); }
+.rail-item.active { background: var(--accent-soft); color: var(--ink-strong); border-color: var(--accent); }
+.rail-item.active span { color: var(--accent); }
+.rail-foot { margin-top: auto; padding: 14px 10px 22px; color: var(--muted); font-size: .72rem; line-height: 1.85; }
+
+.slideframe {
+  flex: 1; min-width: 0; position: relative;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--panel); overflow: hidden;
+}
+.slide {
+  position: absolute; inset: 0; display: none; flex-direction: column;
+  padding: clamp(24px, 2.8vw, 44px) clamp(26px, 3.2vw, 52px) 24px;
+  overflow: auto;
+}
+.slide.active { display: flex; animation: slideIn .4s var(--ease); }
+@keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---- slide content (pre2 flat regions) ---- */
+.slide .kicker { display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--accent-deep); margin: 0 0 .45rem; }
+.slide .section-title { margin: 0; font-size: var(--fs-h2); font-weight: 800; letter-spacing: -.01em;
+  line-height: 1.2; color: var(--ink-strong); }
+.slide .lead { margin: .55rem 0 0; font-size: 1.16rem; color: var(--muted); max-width: 78ch; line-height: 1.55; }
+.slide .hairline { border: none; border-top: var(--hairline); margin: 1rem 0 1.3rem; }
+.slide .slide-body { position: relative; flex: 1 0 auto; }
+.slide .takeaway { margin: 1.4rem 0 0; padding-top: .95rem; border-top: var(--hairline);
+  font-size: 1.14rem; font-weight: 700; color: var(--accent-deep); line-height: 1.4; }
+.slide .takeaway::before { content: "Takeaway — "; font-weight: 600; color: var(--muted); }
+
+/* ---- bottombar ---- */
+.bottombar { height: 52px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.progress { display: flex; align-items: center; gap: 10px; flex: 1; }
+.slide-num { font-size: .74rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.progress .track { height: 3px; background: var(--line); border-radius: 3px; flex: 1; max-width: 260px; overflow: hidden; }
+.progress .fill { height: 100%; background: var(--accent); width: 0; transition: width .3s var(--ease); }
+.kbd-hint { font-size: .72rem; color: var(--muted); }
+.foot-controls { display: flex; gap: 8px; }
+.control { border: 1px solid var(--line); background: transparent; color: var(--ink);
+  border-radius: 7px; min-width: 36px; height: 32px; font-size: .95rem; }
+.control:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---- speaker notes overlay ---- */
+.story-note { position: fixed; z-index: 60; left: 50%; transform: translateX(-50%); bottom: 66px;
+  max-width: 760px; width: calc(100% - 48px); background: var(--ink-strong); color: #fff;
+  border-radius: 12px; padding: 15px 20px; box-shadow: 0 18px 50px rgba(0,0,0,.25);
+  font-size: .82rem; line-height: 1.6; display: none; }
+.story-note.visible { display: block; }
+.story-note b { display: block; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-soft); margin-bottom: 5px; }
+
+/* ---- tooltip ---- */
+#tooltip { position: fixed; z-index: 90; pointer-events: none; opacity: 0; transition: opacity .14s;
+  max-width: 300px; background: var(--ink-strong); color: #fff; font-size: 12px; line-height: 1.6;
+  padding: 9px 13px; border-radius: 9px; box-shadow: 0 12px 40px rgba(0,0,0,.25); }
+#tooltip b { color: var(--accent-soft); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   CONTENT COMPONENTS  (pre2 flat patterns)
+   ════════════════════════════════════════════════════════════════════════ */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2.4rem; }
+.two-col > * + * { border-left: var(--hairline); padding-left: 2.4rem; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 2rem; }
+.three-col > * + * { border-left: var(--hairline); padding-left: 2rem; }
+
+.rq-name { font-size: .76rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-deep); }
+.rq-q { margin: .45rem 0 0; font-size: .96rem; line-height: 1.5; color: var(--ink); }
+.rq + .rq { margin-top: 1.4rem; }
+
+.sample .k { font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sample .v { margin-top: .15rem; font-size: .96rem; color: var(--ink-strong); }
+.sample .v em { font-style: normal; font-weight: 800; color: var(--accent); }
+.sample .note { margin-top: .2rem; font-size: .8rem; color: var(--muted); }
+
+.block { margin-top: 1.7rem; padding-top: 1.25rem; border-top: var(--hairline); }
+.block-head { margin: 0 0 .85rem; font-size: .82rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--accent-deep); }
+
+.viz { position: relative; width: 100%; }
+.viz svg { display: block; width: 100%; height: auto; }
+.viz .demo-title { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; fill: var(--accent-deep); }
+.viz .demo-label { font-size: 12px; fill: var(--ink); }
+.viz .demo-val { font-size: 12px; fill: var(--muted); }
+
+.placeholder-note { padding: 3rem 1rem; text-align: center; color: var(--muted);
+  border: 1px dashed var(--line); border-radius: var(--radius); font-size: .9rem; }
+
+/* ---------- design pipeline (survey → groups → interviews) ---------- */
+.pipeline { display: grid; grid-template-columns: 1fr 28px 1fr 28px 1fr; align-items: center; gap: 10px; }
+.pipe-step { border: 1px solid var(--line); border-radius: 8px; padding: 15px 12px; text-align: center; }
+.pipe-step b { display: block; font-size: .92rem; font-weight: 800; color: var(--ink-strong); }
+.pipe-step small { display: block; color: var(--muted); font-size: .73rem; margin-top: 4px; line-height: 1.35; }
+.pipe-arrow { color: var(--accent); text-align: center; font-size: 1.1rem; }
+
+/* ---------- branching-logic lines ---------- */
+.branch { font-size: .86rem; line-height: 2.05; color: var(--ink); }
+.branch code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .76rem; color: var(--accent-deep); background: var(--accent-soft); padding: 1px 5px; border-radius: 3px; }
+
+/* ---------- design-stance / reflection list ---------- */
+.reflect { list-style: none; margin: 0; padding: 0; }
+.reflect li { position: relative; padding: 0 0 11px 16px; font-size: .85rem; line-height: 1.55; color: var(--ink); }
+.reflect li::before { content: ""; position: absolute; left: 0; top: 7px; width: 7px; height: 7px; border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent); }
+.reflect li b { color: var(--accent-deep); }
+
+/* ---------- chart footnote + legend ---------- */
+.footnote { margin: .7rem 0 0; font-size: .84rem; color: var(--muted); line-height: 1.55; }
+.legend { display: flex; flex-wrap: wrap; gap: 1.2rem; margin: .3rem 0 .4rem; font-size: .84rem; color: var(--muted); }
+.legend .li { display: inline-flex; align-items: center; gap: .4rem; }
+.legend .sw { width: .72rem; height: .72rem; border-radius: 2px; display: inline-block; }
+
+/* ---------- segmented toggle (count / %) ---------- */
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: none; background: transparent; color: var(--muted); font-size: .74rem; font-weight: 700; padding: 6px 13px; cursor: pointer; letter-spacing: .03em; }
+.seg button.active { background: var(--accent); color: #fff; }
+.seg button + button { border-left: 1px solid var(--line); }
+
+/* ---------- joint display (survey → interview → opportunity) ---------- */
+.joint { display: grid; grid-template-columns: 1.05fr 1.4fr 1.15fr; border-top: var(--hairline); border-left: var(--hairline); }
+.joint > div { padding: 10px 12px; border-right: var(--hairline); border-bottom: var(--hairline); font-size: .83rem; line-height: 1.45; color: var(--ink); }
+.joint .jh { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); background: var(--accent-soft); }
+.joint b { display: block; font-size: .76rem; color: var(--accent-deep); margin-bottom: 3px; }
+
+/* ---------- theme list (interview themes) ---------- */
+.theme-list { margin: 0; padding: 0 0 0 1.25rem; }
+.theme-list li { padding: 8px 0; font-size: .88rem; line-height: 1.4; color: var(--ink); border-bottom: var(--hairline); }
+.theme-list li:last-child { border-bottom: none; }
+
+/* ---------- G1–G4 inline tags (underlined, hover → definition) ---------- */
+.g-tag { border-bottom: 2px solid; cursor: help; font-weight: 650; white-space: nowrap; }
+.g-tag.g1 { border-color: #7c6bb0; }
+.g-tag.g2 { border-color: #c25e4c; }
+.g-tag.g3 { border-color: #8d9baa; }
+.g-tag.g4 { border-color: #1683a5; }
+
+/* ---------- questionnaire question links ---------- */
+.q-link { color: var(--accent); border-bottom: 1px dotted var(--accent); text-decoration: none; cursor: pointer; }
+.q-link:hover { text-decoration: none; border-bottom-style: solid; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   RESPONSIVE  (PC-first; degrade on narrow screens)
+   ════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  body { overflow: auto; }
+  .shell { height: auto; min-height: 100vh; padding: 0 12px; }
+  .topbar { height: 56px; }
+  .rail { display: none; }
+  .main { padding-top: 10px; }
+  .slideframe { min-height: calc(100vh - 130px); }
+  .slide { padding: 22px 18px; }
+  .topright .capsule { display: none; }
+  .kbd-hint { display: none; }
+}
+@media (max-width: 860px) {
+  .two-col, .three-col { grid-template-columns: 1fr; gap: 1.3rem; }
+  .two-col > * + *, .three-col > * + * { border-left: none; padding-left: 0; border-top: var(--hairline); padding-top: 1.3rem; }
+}
+@media (max-width: 560px) {
+  .slide .takeaway { font-size: .95rem; }
+  .brand small { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide.active { animation: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="shell">
+  <!-- ═══════════════ TOPBAR ═══════════════ -->
+  <header class="topbar">
+    <div class="brand"><b><span class="tag">ADS401</span> · XJTLU AI — Awareness, Adoption &amp; Use</b></div>
+    <div class="topright">
+      <span class="capsule live">● DATA-DRIVEN</span>
+      <span class="capsule">27 SURVEYS + 7 INTERVIEWS</span>
+      <button class="toolbar-btn" id="notesBtn" title="Toggle speaker notes (N)">Speaker notes N</button>
+      <button class="toolbar-btn" id="fullBtn" title="Fullscreen (F)">Fullscreen F ↗</button>
+    </div>
+  </header>
+
+  <!-- ═══════════════ MAIN (rail + slideframe) ═══════════════ -->
+  <main class="main">
+    <nav class="rail" aria-label="Slides">
+      <div class="rail-head">Presentation · Pre3</div>
+      <div id="rail-items"></div>
+      <div class="rail-foot">← → / Space to navigate<br>1–9 to jump<br>N notes · F fullscreen</div>
+    </nav>
+
+    <div class="slideframe" id="frame">
+
+      <!-- ─────────────── SLIDE 1 · Research Focus & Questions ─────────────── -->
+      <section class="slide active" data-label="Research Focus &amp; Questions"
+               data-note="Research focus: why is a widely-known campus AI not necessarily a common study tool? We target 44 eligible ADS401 students, receive 27 submissions (one cross-language duplicate respondent) and 7 interviews. This is an observational study — no causal claims.">
+        <span class="kicker">Research Focus &amp; Questions</span>
+        <h2 class="section-title">ADS401 Students' Perspective on AI Agents at XJTLU</h2>
+        <p class="lead">XJTLU provides AI services such as Junmou AI to support learning, yet ADS401 students' awareness, adoption and use of these tools remain unclear. This study explores their use or non-use of XJTLU AI and the reasons behind their choices, to inform future improvements.</p>
+        <hr class="hairline">
+        <div class="slide-body">
+
+          <!-- Research questions (verbatim from pre2/scripts.md) -->
+          <div class="two-col">
+            <div>
+              <div class="rq">
+                <div class="rq-name">RQ1 · Awareness &amp; Adoption</div>
+                <p class="rq-q">To what extent are students in our ADS401 module aware of and adopting XJTLU AI?</p>
+              </div>
+              <div class="rq">
+                <div class="rq-name">RQ2 · Usage Patterns</div>
+                <p class="rq-q">How do students in ADS401 use XJTLU AI for their academic tasks?</p>
+              </div>
+            </div>
+            <div class="rq">
+              <div class="rq-name">RQ3 · Adoption Factors &amp; Perceived Comparison</div>
+              <p class="rq-q">What perceived benefits, barriers, and differences between XJTLU AI and external AI services are associated with students' adoption and intentions to continue, try, or resume using XJTLU AI?</p>
+            </div>
+          </div>
+
+          <!-- Sample meta (3 columns) -->
+          <div class="three-col block">
+            <div class="sample">
+              <div class="k">Target</div>
+              <div class="v"><em>44</em> eligible invitees</div>
+              <div class="note">48 enrolled, 4 researchers excluded</div>
+            </div>
+            <div class="sample">
+              <div class="k">Achieved sample</div>
+              <div class="v"><em>27</em> responses (61.4%)</div>
+            </div>
+            <div class="sample">
+              <div class="k">Design</div>
+              <div class="v">Explanatory sequential mixed-methods</div>
+            </div>
+          </div>
+
+          <!-- Respondent demographics (D3, 2×2 grid) -->
+          <div class="block">
+            <h3 class="block-head">Respondent demographics (n = 27)</h3>
+            <div class="viz" data-viz="s-01-demo"></div>
+          </div>
+        </div>
+        <p class="takeaway">Observational study of ADS401 students' self-reported AI use.</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 2 · Study Design & Data Collection ─────────────── -->
+      <section class="slide" data-label="Study Design &amp; Data Collection"
+               data-note="Design: 48 enrolled → 44 eligible invitees → 27 responses (61.4%) and 7 interviews. Q9 splits respondents into four usage groups. The survey is cross-sectional and non-experimental — the 27→2 states are different definition slices, not a tracked attrition path. Interview 'trial' is historical, not the survey's four-week G1.">
+        <span class="kicker">Study Design &amp; Data Collection</span>
+        <h2 class="section-title">How we collected the evidence</h2>
+        <p class="lead">A non-experimental, cross-sectional online survey (Q1–Q24) followed by purposive follow-up interviews. Participation was voluntary; no conditions were assigned.</p>
+        <hr class="hairline">
+        <div class="slide-body">
+
+          <!-- Design pipeline -->
+          <div class="pipeline">
+            <div class="pipe-step"><b>Online survey</b><small>Q1–Q24 · 27 responses</small></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><b>Four groups</b><small>Q9 · usage split</small></div>
+            <div class="pipe-arrow">→</div>
+            <div class="pipe-step"><b>Interviews</b><small>7 · Nov 2026</small></div>
+          </div>
+
+          <!-- Four groups + branching -->
+          <div class="two-col block">
+            <div>
+              <h3 class="block-head">Four groups (Q9)</h3>
+              <div class="viz" data-viz="s-02-groups"></div>
+            </div>
+            <div>
+              <h3 class="block-head">Branching logic (Q9)</h3>
+              <div class="branch">
+                <code>Both</code> → Q10–Q15 + Q18–Q18b + Q19<br>
+                <code>XJTLU only</code> → Q10–Q15<br>
+                <code>External only</code> → Q16–Q17 + Q18–Q18b<br>
+                <code>Neither</code> → Q16–Q17<br>
+                <span style="color:var(--muted)">Q1 consent · Q23 → Q24 interview opt-in</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <p class="takeaway">Cross-sectional survey — captures recent use and intentions, not causal effects or long-term continued use.</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 3 · RQ1 Awareness & Adoption ─────────────── -->
+      <section class="slide" data-label="RQ1 · Awareness &amp; Adoption"
+               data-note="RQ1: 24 of 27 have heard of XJTLU AI, 15 ever used it (of 26 who answered), 8 used it in the past four weeks, 2 use it 5+ times. These are different state slices from different questions — not a tracked conversion funnel.">
+        <span class="kicker">RQ1 · Awareness &amp; Adoption</span>
+        <h2 class="section-title">High awareness, limited recent adoption</h2>
+        <p class="lead">A cross-sectional snapshot of awareness, prior use and recent academic engagement — different state slices, not a tracked conversion funnel. n = 27 submissions.</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <div class="viz" data-viz="s-03-funnel"></div>
+          <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#so-far-how-familiar-are-you-with-xjtlu-ai">Q7</a> · <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#have-you-ever-used-xjtlu-ai">Q8</a> · <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#during-the-past-four-weeks-which-statement-best-describes-your-use-of-ai-for-ads401-learning-activities-select-one">Q9</a> · <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#how-many-times-did-you-use-xjtlu-ai-for-ads401-learning-during-the-past-four-weeks">Q10</a> — counts out of 27 submissions (Q8: 26 answered). Cross-sectional; states are not necessarily nested.</p>
+        </div>
+        <p class="takeaway">Students broadly know XJTLU AI, but only 8 report using it in the past four weeks.</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 4 · RQ2 Usage Patterns ─────────────── -->
+      <section class="slide" data-label="RQ2 · Usage Patterns"
+               data-note="RQ2: XJTLU AI users (n=8) report campus resources 8/8 (pending form audit — possible default-select). External AI users (n=22) use it across in-course content 13, campus 10, beyond-course 8, production 8, policy 5. Different denominators.">
+        <span class="kicker">RQ2 · Usage Patterns</span>
+        <h2 class="section-title">External AI spans learning; XJTLU AI centres on campus resources</h2>
+        <p class="lead">Five activity categories compared across the two tools. XJTLU AI users = <span class="g-tag g1">G1</span> + <span class="g-tag g4">G4</span> (n=8); External AI users = <span class="g-tag g1">G1</span> + <span class="g-tag g2">G2</span> (n=22).</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <div class="viz" data-viz="s-04-activity"></div>
+          <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#for-which-broad-categories-of-ads401-learning-activities-did-you-use-xjtlu-ai-in-the-past-four-weeks-select-all-that-apply">Q11</a> (n=8) · <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#for-which-broad-categories-of-ads401-learning-activities-did-you-use-external-ai-in-the-past-four-weeks-select-all-that-apply">Q18</a> (n=22) — multi-select. Q11 “campus resources” = 8/8, pending form audit. Hover bars for count &amp; share.</p>
+        </div>
+        <p class="takeaway">XJTLU AI is reported mainly for campus resources; external AI is used across learning tasks.</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 5 · RQ3 Perceived Experience ─────────────── -->
+      <section class="slide" data-label="RQ3 · Perceived Experience"
+               data-note="RQ3 experience: n=27 → recent users 8 → valid ratings 7 (+1 N/A). Medians: useful 3, efficiency 2, easy-to-use 3, easy-to-learn 2, trust 3, accurate 3. Exploratory — not a validated TAM scale, n=7.">
+        <span class="kicker">RQ3 · Perceived Experience</span>
+        <h2 class="section-title">Perceptions vary among seven respondents</h2>
+        <p class="lead">Agreement (1–5) among recent XJTLU AI users (<span class="g-tag g1">G1</span> + <span class="g-tag g4">G4</span>, n=8): n=27 → recent users 8 → valid ratings 7 (+1 N/A). Too few to generalise.</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <div class="viz" data-viz="s-05-likert"></div>
+          <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#based-on-your-overall-experience-using-xjtlu-ai-in-ads401-how-much-do-you-agree-with-these-statements-select-na-if-you-cannot-judge">Q13</a> · 6 items · medians 3, 2, 3, 2, 3, 3. Exploratory, context-specific items — not the complete validated TAM. Ratings co-vary across constructs (ρ ≈ .86–.94, n = 7) — descriptive only.</p>
+        </div>
+        <p class="takeaway">Ratings are mixed; ease-of-use items trend lower — but n=7 cannot support strong claims.</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 6 · RQ3 Agreement distribution ─────────────── -->
+      <section class="slide" data-label="Agreement Distribution"
+               data-note="Agreement distribution: each dot is one of the 7 valid ratings (1 strongly disagree … 5 strongly agree), jittered for readability. Ratings cluster at 3 neutral; easy-to-learn dips to 1–2. Median per statement shown as a vertical band.">
+        <span class="kicker">RQ3 · Agreement Distribution</span>
+        <h2 class="section-title">Agreement distribution: ratings cluster neutral-to-positive</h2>
+        <p class="lead">Each dot is one of the 7 valid ratings from recent XJTLU AI users (<span class="g-tag g1">G1</span> + <span class="g-tag g4">G4</span>): 1 = strongly disagree … 5 = strongly agree, jittered for readability. Medians shown per statement.</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <div class="viz" data-viz="s-06-agree"></div>
+          <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#based-on-your-overall-experience-using-xjtlu-ai-in-ads401-how-much-do-you-agree-with-these-statements-select-na-if-you-cannot-judge">Q13</a> · 6 statements · n = 7 valid (+1 N/A). Ease-of-use items dip toward 1–2.</p>
+        </div>
+        <p class="takeaway">Ratings concentrate around neutral; no statement reaches confident positive agreement.</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 6 · RQ3 Barriers & Comparison ─────────────── -->
+      <section class="slide" data-label="RQ3 · Barriers &amp; Comparison"
+               data-note="RQ3 barriers: among external-only users (G2, n=15), 9 prefer external AI and 6 are unclear what XJTLU AI does. Overall preference among both-users (G1, n=7): external 4, XJTLU 1, about the same 1, unable to compare 1.">
+        <span class="kicker">RQ3 · Barriers &amp; Comparison</span>
+        <h2 class="section-title">Non-users cite habit and unfamiliarity; overall preference tilts external</h2>
+        <p class="lead">Why external-only users (<span class="g-tag g2">G2</span>, n=15) do not use XJTLU AI — and overall preference among both-users (<span class="g-tag g1">G1</span>, n=7).</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <div class="two-col">
+            <div>
+              <h3 class="block-head"><span class="g-tag g2">G2</span> barriers (n=15)</h3>
+              <div class="viz" data-viz="s-06-barriers"></div>
+            </div>
+            <div>
+              <h3 class="block-head">Overall preference (<span class="g-tag g1">G1</span>, n=7)</h3>
+              <div class="viz" data-viz="s-06-pref"></div>
+            </div>
+          </div>
+          <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#what-are-your-main-reasons-for-not-using-xjtlu-ai-for-ads401-during-the-past-four-weeks-select-up-to-3">Q16</a> (G2) · <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#for-each-activity-category-where-you-used-both-xjtlu-ai-and-external-ai-in-the-past-four-weeks-which-worked-better-in-your-actual-experience-choose-unable-to-compare-where-appropriate">Q19</a> (G1). “Unable to compare” is a real response, not missing data.</p>
+        </div>
+        <p class="takeaway">Habit and unfamiliarity outweigh perceived quality concerns in this small sample.</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 7 · Matched Comparison ─────────────── -->
+      <section class="slide" data-label="Matched Comparison"
+               data-note="Matched usefulness (Q11a×Q18b) for the same activity, both-users. Campus resources has 5 valid pairs with differences 0, 0, -1, +1, +2 — median 0. Other activities have 0–1 pairs. No consistent edge.">
+        <span class="kicker">Matched Comparison</span>
+        <h2 class="section-title">No consistent edge where both tools were used</h2>
+        <p class="lead">Paired usefulness ratings (Q11a × Q18b) for the same activity among both-users (<span class="g-tag g1">G1</span>, n=7). Campus resources is the only activity with enough pairs (5).</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <div class="viz" data-viz="s-07-paired"></div>
+          <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#for-each-activity-category-rate-how-useful-xjtlu-ai-was-in-your-actual-experience-select-na-for-categories-you-did-not-use-it-for">Q11a</a> × <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#for-each-activity-category-rate-how-useful-external-ai-was-in-your-actual-experience-select-na-for-categories-you-did-not-use-it-for">Q18b</a> · valid pairs: campus 5, within 1, production 1 (0 elsewhere). Median difference = 0.</p>
+        </div>
+        <p class="takeaway">A median difference of 0 shows no consistent advantage — not equivalence, not a quality verdict.</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 9 · Interviews: coding & themes ─────────────── -->
+      <section class="slide" data-label="Interviews · Coding &amp; Themes"
+               data-note="Interviews: 7 semi-structured, de-identified interviews (P001–P007, Nov 2026), purposive sampling. 25 codes → 7 themes. Top codes: external-better 6, trial-then-abandon 4, design-generation 4, course-awareness-demand 4. Historical trial ≠ four-week G1.">
+        <span class="kicker">Qualitative · Interviews</span>
+        <h2 class="section-title">Seven interviews: 25 codes → 7 themes</h2>
+        <p class="lead">Semi-structured interviews with 7 de-identified participants (P001–P007), purposively sampled (Nov 2026). Historical trial ≠ the survey's four-week G1.</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <div class="two-col">
+            <div>
+              <h3 class="block-head">Coding — top codes (25 total)</h3>
+              <div class="viz" data-viz="s-08-codes"></div>
+            </div>
+            <div>
+              <h3 class="block-head">Themes (7)</h3>
+              <ol class="theme-list">
+                <li>High awareness, low sustained use</li>
+                <li>Official tasks → campus AI; learning → external</li>
+                <li>Verify with AI, not with textbooks</li>
+                <li>External AI's irreplaceability</li>
+                <li>Perception is bundled, not atomic</li>
+                <li>Privacy concern (new)</li>
+                <li>External wins, but a gap remains</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <p class="takeaway">25 codes distilled to 7 themes — each traceable to participant quotes (see next page).</p>
+      </section>
+
+      <!-- ─────────────── SLIDE 8 · Qualitative Evidence & Conclusions ─────────────── -->
+      <section class="slide" data-label="Qualitative Evidence &amp; Conclusions"
+               data-note="Joint display: each survey pattern is traced to interview evidence and a possible HCI opportunity. Interviews describe historical trial, not the survey's four-week G1. Limitations: small n, cross-sectional, self-reported, exploratory correlations.">
+        <span class="kicker">Qualitative Evidence &amp; Conclusions</span>
+        <h2 class="section-title">Interviews explain the gap — within clear limits</h2>
+        <p class="lead">Joint display: survey pattern → interview evidence → possible HCI opportunity. 7 semi-structured interviews (P001–P007, Nov 2026). Interview “trial” is historical, not the survey's four-week <span class="g-tag g1">G1</span>.</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <div class="joint">
+            <div class="jh">Survey pattern</div><div class="jh">Interview evidence</div><div class="jh">HCI opportunity</div>
+            <div><b>High awareness, low use</b>89% aware → 30% recent → 7% frequent</div>
+            <div>Trial-then-abandon (P001·P004·P005·P006) and awareness gap (P003·P007)</div>
+            <div>Discovery, first-use guidance, and clearer service identity</div>
+            <div><b>Official vs learning split</b>campus AI leads only on campus resources</div>
+            <div>P002: library past papers / e-Bridge ethics; learning via external AI</div>
+            <div>Trusted campus resources + course-knowledge support</div>
+            <div><b>Verification habit</b>low Q12 check frequency, neutral trust</div>
+            <div>P002·P003·P006 cross-check AI with AI; P004 paid → trusts → skips checks</div>
+            <div>Verifiable answers, citations and feedback loops</div>
+            <div><b>External preference</b>Q19 overall 4 vs 1 (directional)</div>
+            <div>6/7 call external better, but none can name who has campus materials</div>
+            <div>Differentiate on exclusive, up-to-date campus materials</div>
+          </div>
+          <div class="block">
+            <h3 class="block-head">Limitations</h3>
+            <ul class="reflect">
+              <li><b>Small, cross-sectional, self-reported</b> — n=27 submissions (26 unique IDs); patterns, not attrition or causation.</li>
+              <li><b>Exploratory perception items</b> — n=7 valid ratings; correlations are descriptive, not a validated TAM.</li>
+              <li><b>Interview ≠ survey group</b> — historical trial is not the survey's four-week G1.</li>
+              <li><b>Q11 campus 8/8 and one Q19 “unable”</b> — pending data audit.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="takeaway">Design opportunities are traceable to findings — presented as hypotheses, not causal claims.</p>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ═══════════════ BOTTOMBAR ═══════════════ -->
+  <footer class="bottombar">
+    <div class="progress">
+      <span class="slide-num" id="slidecounter">01 / 03</span>
+      <div class="track"><div class="fill" id="progress-fill"></div></div>
+      <span class="kbd-hint">← → to navigate · N notes · F fullscreen</span>
+    </div>
+    <div class="foot-controls">
+      <button class="control" id="prev" title="Previous" aria-label="Previous slide">←</button>
+      <button class="control" id="next" title="Next" aria-label="Next slide">→</button>
+    </div>
+  </footer>
+</div>
+
+<!-- Speaker notes overlay -->
+<div class="story-note" id="speaker-notes" role="note"><b>Speaker note / 演讲提示</b><span id="speaker-text"></span></div>
+<!-- Tooltip -->
+<div id="tooltip"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---- app registry (theme + chart mounting) ---- */
+  var App = {
+    registry: {},
+    mount: function (key, renderer) {
+      this.registry[key] = renderer;
+      var el = document.querySelector('[data-viz="' + key + '"]');
+      if (el) renderer(el);
+      return this;
+    },
+    retheme: function (name) {
+      document.documentElement.setAttribute('data-theme', name);
+      return this;
+    }
+  };
+  window.App = App;
+
+  /* ---- tooltip helpers ---- */
+  window.showTip = function (html, evt) {
+    var t = document.getElementById('tooltip');
+    t.innerHTML = html; t.style.opacity = 1;
+    var x = (evt && evt.clientX) || 400, y = (evt && evt.clientY) || 200;
+    t.style.left = Math.min(window.innerWidth - 320, Math.max(12, x + 16)) + 'px';
+    t.style.top = Math.min(window.innerHeight - 120, Math.max(12, y + 16)) + 'px';
+  };
+  window.hideTip = function () { document.getElementById('tooltip').style.opacity = 0; };
+
+  /* ---- G1–G4 inline tags: hover → group definition tooltip ---- */
+  var G_DEFS = {
+    g1: '<b style="color:#7c6bb0">G1 · Both</b><br>Used BOTH XJTLU AI and External AI in the past 4 weeks (n=7)',
+    g2: '<b style="color:#c25e4c">G2 · External only</b><br>Used only External AI in the past 4 weeks (n=15)',
+    g3: '<b style="color:#8d9baa">G3 · Neither</b><br>Used no AI in the past 4 weeks (n=4)',
+    g4: '<b style="color:#1683a5">G4 · XJTLU only</b><br>Used only XJTLU AI in the past 4 weeks (n=1)'
+  };
+  document.addEventListener('mouseover', function (e) {
+    var g = e.target.closest ? e.target.closest('.g-tag') : null;
+    if (g) {
+      var m = g.className.match(/g[1-4]/);
+      if (m && G_DEFS[m[0]]) showTip(G_DEFS[m[0]], e);
+    }
+  });
+  document.addEventListener('mouseout', function (e) {
+    if (e.target.closest && e.target.closest('.g-tag')) hideTip();
+  });
+
+  /* ---- deck navigation ---- */
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var nSlides = slides.length;
+  var rail = document.getElementById('rail-items');
+  var railItems = slides.map(function (s, i) {
+    var b = document.createElement('button');
+    b.className = 'rail-item';
+    b.innerHTML = '<span>' + String(i + 1).padStart(2, '0') + '</span>' + (s.getAttribute('data-label') || ('Slide ' + (i + 1)));
+    b.addEventListener('click', function () { go(i); });
+    rail.appendChild(b);
+    return b;
+  });
+
+  var active = 0, notesVisible = false;
+  function go(i) {
+    active = Math.max(0, Math.min(nSlides - 1, i));
+    slides.forEach(function (s, j) { s.classList.toggle('active', j === active); });
+    railItems.forEach(function (b, j) {
+      b.classList.toggle('active', j === active);
+      b.setAttribute('aria-current', j === active ? 'step' : 'false');
+    });
+    document.getElementById('slidecounter').textContent = String(active + 1).padStart(2, '0') + ' / ' + String(nSlides).padStart(2, '0');
+    document.getElementById('progress-fill').style.width = ((active + 1) / nSlides * 100) + '%';
+    document.getElementById('speaker-text').textContent = slides[active].getAttribute('data-note') || '';
+    hideTip();
+  }
+
+  document.getElementById('next').addEventListener('click', function () { go(active + 1); });
+  document.getElementById('prev').addEventListener('click', function () { go(active - 1); });
+  document.getElementById('notesBtn').addEventListener('click', function () {
+    notesVisible = !notesVisible;
+    document.getElementById('speaker-notes').classList.toggle('visible', notesVisible);
+  });
+  document.getElementById('fullBtn').addEventListener('click', function () {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target && ['INPUT', 'TEXTAREA'].indexOf(e.target.tagName) >= 0) return;
+    if (['ArrowRight', 'ArrowDown', ' '].indexOf(e.key) >= 0) { e.preventDefault(); go(active + 1); }
+    else if (['ArrowLeft', 'ArrowUp'].indexOf(e.key) >= 0) { e.preventDefault(); go(active - 1); }
+    else if (e.key === 'Home') { go(0); }
+    else if (e.key === 'End') { go(nSlides - 1); }
+    else if (/^[1-9]$/.test(e.key)) { go(Number(e.key) - 1); }
+    else if (e.key.toLowerCase() === 'n') { document.getElementById('notesBtn').click(); }
+    else if (e.key.toLowerCase() === 'f') { document.getElementById('fullBtn').click(); }
+  });
+
+  go(0);
+
+  /* ---- demographic chart (Slide 1 · sample overview) ----
+     Renders inline labels + values so the numbers stay visible in a PDF preview.
+     Layout: 2×2 grid (Programme / Gender / Age / AI experience). */
+  App.mount('s-01-demo', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var accent = css.getPropertyValue('--accent').trim() || '#1683a5';
+
+    var nTotal = 27;
+    var panels = [
+      { dim: 'Programme', items: [['Human-centric', 13], ['Human-AI Collaborative', 13], ['Social Computing (FT)', 1]] },
+      { dim: 'Gender', items: [['Man', 12], ['Woman', 11], ['Prefer not to say', 4]] },
+      { dim: 'Age', items: [['21–24', 19], ['25–29', 5], ['≤20', 2], ['≥30', 1]] },
+      { dim: 'AI experience', items: [['>3 years', 10], ['1–2 years', 6], ['<1 year', 5], ['2–3 years', 5], ['None', 1]] }
+    ];
+
+    var colW = 465, gapX = 30, gapY = 30, titleH = 22, barH = 26;
+    var labelW = 165, barMax = colW - labelW - 95;
+
+    panels.forEach(function (p) { p.h = titleH + p.items.length * barH; });
+    var row0H = Math.max(panels[0].h, panels[1].h);
+    var row1Y = row0H + gapY;
+    var H = row0H + gapY + Math.max(panels[2].h, panels[3].h);
+    var W = colW * 2 + gapX;
+
+    panels[0].x = 0;           panels[0].y = 0;
+    panels[1].x = colW + gapX; panels[1].y = 0;
+    panels[2].x = 0;           panels[2].y = row1Y;
+    panels[3].x = colW + gapX; panels[3].y = row1Y;
+
+    var svg = d3.select(el).append('svg')
+      .attr('viewBox', '0 0 ' + W + ' ' + H)
+      .attr('role', 'img')
+      .attr('aria-label', 'Respondent demographics: programme, gender, age and AI experience (n = 27)');
+
+    panels.forEach(function (p) {
+      var g = svg.append('g').attr('transform', 'translate(' + p.x + ',' + p.y + ')');
+      g.append('text').attr('class', 'demo-title').attr('x', 0).attr('y', titleH - 8).text(p.dim);
+      var rowG = g.append('g').attr('transform', 'translate(0,' + titleH + ')');
+      p.items.forEach(function (it, i) {
+        var label = it[0], n = it[1], pct = (100 * n / nTotal).toFixed(1);
+        var r = rowG.append('g').attr('transform', 'translate(0,' + (i * barH) + ')');
+        r.append('text').attr('class', 'demo-label').attr('x', labelW - 10).attr('y', barH / 2 + 4).attr('text-anchor', 'end').text(label);
+        r.append('rect').attr('x', labelW).attr('y', 8).attr('width', (n / nTotal) * barMax).attr('height', 12).attr('fill', accent);
+        r.append('text').attr('class', 'demo-val').attr('x', labelW + (n / nTotal) * barMax + 8).attr('y', barH / 2 + 4).text(n + ' (' + pct + '%)');
+      });
+    });
+  });
+
+  /* ---- four Q9 usage groups (Slide 2 · Study Design) ---- */
+  App.mount('s-02-groups', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+    var muted = css.getPropertyValue('--muted').trim() || '#687780';
+    var gcolors = ['#7c6bb0', '#c25e4c', '#8d9baa', '#1683a5']; // G1·G2·G3·G4 (consistent everywhere)
+
+    var groups = [
+      ['G1 · Both', 'XJTLU AI + External AI', 7],
+      ['G2 · External only', 'External AI only', 15],
+      ['G3 · Neither', 'No AI', 4],
+      ['G4 · XJTLU only', 'XJTLU AI only', 1]
+    ];
+    var nTotal = 27;
+    var W = 460, labelW = 150, barMax = 160, barH = 42, titleH = 6;
+    var H = titleH + groups.length * barH;
+
+    var svg = d3.select(el).append('svg')
+      .attr('viewBox', '0 0 ' + W + ' ' + H)
+      .attr('role', 'img')
+      .attr('aria-label', 'Four Q9 usage groups: G1 Both 7, G2 External only 15, G3 Neither 4, G4 XJTLU only 1');
+
+    groups.forEach(function (g, i) {
+      var y = titleH + i * barH;
+      var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
+      r.append('text').attr('x', 0).attr('y', 18).attr('font-size', 13).attr('font-weight', 800).attr('fill', ink).text(g[0]);
+      r.append('text').attr('x', 0).attr('y', 34).attr('font-size', 11).attr('fill', muted).text(g[1]);
+      r.append('rect').attr('x', labelW).attr('y', 16).attr('width', (g[2] / nTotal) * barMax).attr('height', 12).attr('fill', gcolors[i]);
+      r.append('text').attr('x', labelW + (g[2] / nTotal) * barMax + 8).attr('y', 27).attr('font-size', 12).attr('fill', muted).text(g[2] + ' (' + (100 * g[2] / nTotal).toFixed(1) + '%)');
+    });
+  });
+
+  /* ---- RQ1 funnel (Slide 3) ---- */
+  App.mount('s-03-funnel', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var accent = css.getPropertyValue('--accent').trim() || '#1683a5';
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+    var muted = css.getPropertyValue('--muted').trim() || '#687780';
+
+    var stages = [
+      ['Aware of XJTLU AI', 24, 'Q7 · heard of it'],
+      ['Ever used it', 15, 'Q8 · 26 answered'],
+      ['Recent use (past 4 wks)', 8, 'Q9 · Both + XJTLU only'],
+      ['Frequent use (5+ times)', 2, 'Q10 · 5+ times']
+    ];
+    var nTotal = 27, W = 920, labelW = 250, barMax = 430, barH = 58;
+    var H = stages.length * barH;
+
+    var svg = d3.select(el).append('svg')
+      .attr('viewBox', '0 0 ' + W + ' ' + H)
+      .attr('role', 'img')
+      .attr('aria-label', 'Awareness to frequent use: 24 aware, 15 ever used, 8 recent, 2 frequent');
+
+    stages.forEach(function (s, i) {
+      var y = i * barH;
+      var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
+      r.append('text').attr('x', 0).attr('y', 23).attr('font-size', 14).attr('font-weight', 800).attr('fill', ink).text(s[0]);
+      r.append('text').attr('x', 0).attr('y', 41).attr('font-size', 11).attr('fill', muted).text(s[2]);
+      var w = (s[1] / nTotal) * barMax;
+      r.append('rect').attr('x', labelW).attr('y', 13).attr('width', w).attr('height', 21).attr('fill', accent).attr('opacity', 0.5 + 0.5 * (1 - i / 3));
+      r.append('text').attr('x', labelW + w + 10).attr('y', 29).attr('font-size', 14).attr('font-weight', 800).attr('fill', ink).text(s[1] + ' (' + (100 * s[1] / nTotal).toFixed(1) + '%)');
+    });
+  });
+
+  /* ---- RQ2 activity comparison: butterfly + count/% toggle (Slide 4) ---- */
+  App.mount('s-04-activity', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var cX = css.getPropertyValue('--c-xjtu').trim() || '#1683a5';
+    var cE = css.getPropertyValue('--c-ext').trim() || '#c25e4c';
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+    var muted = css.getPropertyValue('--muted').trim() || '#687780';
+
+    var cats = ['Campus resources', 'In-course content', 'Beyond-course support', 'Coursework production', 'ADS401 policy'];
+    var xjtu = [8, 2, 1, 1, 0], nX = 8;
+    var ext = [10, 13, 8, 8, 5], nE = 22;
+    var mode = 'count';
+
+    var W = 920, H = 460, centerX = 460, halfLabel = 130, barLen = 290;
+    var plotTop = 56, rowH = 74, barH = 26;
+
+    el.innerHTML = '';
+    var head = el.appendChild(document.createElement('div'));
+    head.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px';
+    head.innerHTML = '<div class="legend" style="margin:0">' +
+      '<span class="li"><i class="sw" style="background:' + cX + '"></i>XJTLU AI · n=' + nX + '</span>' +
+      '<span class="li"><i class="sw" style="background:' + cE + '"></i>External AI · n=' + nE + '</span></div>' +
+      '<div class="seg"><button data-mode="count" class="active">Count 数量</button><button data-mode="pct">% share 占比</button></div>';
+
+    var svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('role', 'img')
+      .attr('aria-label', 'Activity usage butterfly: XJTLU AI left, External AI right');
+
+    function value(c, n) { return mode === 'pct' ? 100 * c / n : c; }
+    function maxV() { return mode === 'pct' ? 100 : 15; }
+    function fmt(v) { return mode === 'pct' ? (Math.round(v * 10) / 10) + '%' : String(v); }
+    function ticks() { return mode === 'pct' ? [0, 25, 50, 75, 100] : [0, 5, 10, 15]; }
+
+    function draw() {
+      svg.selectAll('*').remove();
+      var bot = plotTop + cats.length * rowH;
+      svg.append('line').attr('x1', centerX).attr('x2', centerX).attr('y1', plotTop - 20).attr('y2', bot - 10)
+        .attr('stroke', '#cfd6d8').attr('stroke-width', 1.4);
+
+      ticks().forEach(function (t) {
+        var lx = centerX - halfLabel - (t / maxV()) * barLen;
+        var rx = centerX + halfLabel + (t / maxV()) * barLen;
+        [lx, rx].forEach(function (x) {
+          svg.append('line').attr('x1', x).attr('x2', x).attr('y1', plotTop - 6).attr('y2', bot).attr('stroke', '#e7ebec').attr('stroke-width', 1);
+        });
+        svg.append('text').attr('x', lx).attr('y', plotTop - 26).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', muted).text(t + (mode === 'pct' ? '%' : ''));
+        svg.append('text').attr('x', rx).attr('y', plotTop - 26).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', muted).text(t + (mode === 'pct' ? '%' : ''));
+      });
+
+      cats.forEach(function (c, i) {
+        var y = plotTop + i * rowH;
+        var vx = value(xjtu[i], nX), ve = value(ext[i], nE);
+        var wx = Math.max(2, (vx / maxV()) * barLen), we = Math.max(2, (ve / maxV()) * barLen);
+        svg.append('text').attr('x', centerX).attr('y', y + barH / 2 + 5).attr('text-anchor', 'middle').attr('font-size', 12.5).attr('fill', ink).text(c);
+        svg.append('rect').attr('x', centerX - halfLabel - wx).attr('y', y).attr('width', wx).attr('height', barH).attr('fill', cX).attr('rx', 5)
+          .on('mouseenter', function (ev) { showTip('<b style="color:' + cX + '">XJTLU AI</b><br>' + c + '<br>' + xjtu[i] + ' / ' + nX + ' (' + (100 * xjtu[i] / nX).toFixed(1) + '%)', ev); })
+          .on('mousemove', function (ev) { var t = document.getElementById('tooltip'); t.style.left = Math.min(window.innerWidth - 320, Math.max(12, ev.clientX + 16)) + 'px'; t.style.top = Math.min(window.innerHeight - 120, Math.max(12, ev.clientY + 16)) + 'px'; })
+          .on('mouseleave', function () { hideTip(); });
+        svg.append('text').attr('x', centerX - halfLabel - wx - 8).attr('y', y + barH / 2 + 5).attr('text-anchor', 'end').attr('font-size', 12).attr('font-weight', 700).attr('fill', ink).text(fmt(vx));
+        svg.append('rect').attr('x', centerX + halfLabel).attr('y', y).attr('width', we).attr('height', barH).attr('fill', cE).attr('rx', 5)
+          .on('mouseenter', function (ev) { showTip('<b style="color:' + cE + '">External AI</b><br>' + c + '<br>' + ext[i] + ' / ' + nE + ' (' + (100 * ext[i] / nE).toFixed(1) + '%)', ev); })
+          .on('mousemove', function (ev) { var t = document.getElementById('tooltip'); t.style.left = Math.min(window.innerWidth - 320, Math.max(12, ev.clientX + 16)) + 'px'; t.style.top = Math.min(window.innerHeight - 120, Math.max(12, ev.clientY + 16)) + 'px'; })
+          .on('mouseleave', function () { hideTip(); });
+        svg.append('text').attr('x', centerX + halfLabel + we + 8).attr('y', y + barH / 2 + 5).attr('font-size', 12).attr('font-weight', 700).attr('fill', ink).text(fmt(ve));
+      });
+    }
+
+    el.querySelectorAll('.seg button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        mode = b.getAttribute('data-mode');
+        el.querySelectorAll('.seg button').forEach(function (x) { x.classList.toggle('active', x === b); });
+        draw();
+      });
+    });
+
+    draw();
+  });
+
+  /* ---- Q13 diverging stacked bars (Slide 5) — vertical legend + hover ---- */
+  App.mount('s-05-likert', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+    var muted = css.getPropertyValue('--muted').trim() || '#687780';
+
+    var items = [
+      ['Useful for ADS401 tasks', [0, 2, 4, 1, 0], 3],
+      ['Improves learning efficiency', [1, 3, 2, 1, 0], 2],
+      ['Easy to use', [0, 2, 3, 2, 0], 3],
+      ['Easy to learn', [1, 3, 1, 1, 1], 2],
+      ['Trust the answers', [0, 2, 3, 1, 1], 3],
+      ['Accurate answers', [0, 2, 4, 1, 0], 3]
+    ];
+    // 1=strong disagree → 5=strong agree; 3 is the mid-transition tone; N/A grey
+    var colors = ['#b3403a', '#d98c86', '#aca2a9', '#7fb8cc', '#1683a5'];
+    var levelLabels = ['1 Strongly disagree', '2 Disagree', '3 Neutral', '4 Agree', '5 Strongly agree'];
+    var W = 920, labelW = 250, barW = 300, topH = 58, barH = 42;
+    var H = topH + items.length * barH + 6;
+
+    var svg = d3.select(el).append('svg')
+      .attr('viewBox', '0 0 ' + W + ' ' + H)
+      .attr('role', 'img')
+      .attr('aria-label', 'Q13 Likert ratings: six items, seven valid responses each, one N/A');
+
+    // vertical column legend: coloured swatch + rotated label above each column
+    var segW = barW / 5;
+    for (var k = 0; k < 5; k++) {
+      var cx = labelW + k * segW + segW / 2;
+      svg.append('rect').attr('x', labelW + k * segW + 1).attr('y', 8).attr('width', segW - 2).attr('height', 14).attr('fill', colors[k]).attr('rx', 2);
+      svg.append('text').attr('x', cx).attr('y', 40).attr('transform', 'rotate(-28 ' + cx + ' 40)')
+        .attr('text-anchor', 'end').attr('font-size', 10.5).attr('fill', muted).text(levelLabels[k]);
+    }
+    // N/A swatch (grey) to the right of the bars
+    var naX = labelW + barW + 14;
+    svg.append('rect').attr('x', naX).attr('y', 8).attr('width', 16).attr('height', 14).attr('fill', '#d6d6d6').attr('rx', 2);
+    svg.append('text').attr('x', naX + 8).attr('y', 40).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', muted).text('N/A');
+
+    items.forEach(function (it, i) {
+      var y = topH + i * barH;
+      var dist = it[1], med = it[2];
+      var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
+      r.append('text').attr('x', 0).attr('y', barH / 2 + 5).attr('font-size', 13).attr('fill', ink).text(it[0]);
+
+      dist.forEach(function (cnt, k) {
+        var w = segW * cnt;
+        if (w > 0) r.append('rect').attr('x', labelW + k * segW + 1).attr('y', 8).attr('width', w - 2).attr('height', 18).attr('fill', colors[k]).attr('rx', 2)
+          .on('mouseenter', function (ev) { showTip('<b style="color:' + colors[k] + '">' + (k + 1) + ' · ' + levelLabels[k].slice(2) + '</b><br>' + it[0] + '<br>' + cnt + ' of 7 respondents', ev); })
+          .on('mousemove', function (ev) { var t = document.getElementById('tooltip'); t.style.left = Math.min(window.innerWidth - 320, Math.max(12, ev.clientX + 16)) + 'px'; t.style.top = Math.min(window.innerHeight - 120, Math.max(12, ev.clientY + 16)) + 'px'; })
+          .on('mouseleave', function () { hideTip(); });
+      });
+      // median marker
+      r.append('line').attr('x1', labelW + (med - 0.5) * segW).attr('x2', labelW + (med - 0.5) * segW).attr('y1', 3).attr('y2', 30).attr('stroke', ink).attr('stroke-width', 1.6);
+      r.append('text').attr('x', labelW + (med - 0.5) * segW + 4).attr('y', 9).attr('font-size', 10).attr('fill', ink).attr('font-weight', 700).text('Md ' + med);
+    });
+
+    // single N/A note
+    svg.append('text').attr('x', labelW).attr('y', H - 2).attr('font-size', 11).attr('fill', muted).text('Each statement has 1 N/A (n = 7 valid + 1 N/A)');
+  });
+
+  /* ---- G2 barriers (Slide 6, left) ---- */
+  App.mount('s-06-barriers', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var g2 = css.getPropertyValue('--g2').trim() || '#c25e4c';
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+    var muted = css.getPropertyValue('--muted').trim() || '#687780';
+
+    var bars = [
+      ['Prefer External AI', 9],
+      ['Unclear what it can do', 6],
+      ['Unsure how to access', 3],
+      ['Concerned about accuracy', 3],
+      ['Privacy / data concerns', 2]
+    ];
+    var n = 15, W = 420, labelW = 168, barMax = 130, barH = 40;
+    var H = bars.length * barH;
+
+    var svg = d3.select(el).append('svg')
+      .attr('viewBox', '0 0 ' + W + ' ' + H)
+      .attr('role', 'img')
+      .attr('aria-label', 'G2 barriers: prefer external 9, unclear 6, access 3, accuracy 3, privacy 2');
+
+    bars.forEach(function (b, i) {
+      var y = i * barH;
+      var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
+      r.append('text').attr('x', 0).attr('y', barH / 2 + 5).attr('font-size', 12).attr('fill', ink).text(b[0]);
+      var w = (b[1] / n) * barMax;
+      r.append('rect').attr('x', labelW).attr('y', 8).attr('width', w).attr('height', 14).attr('fill', g2);
+      r.append('text').attr('x', labelW + w + 8).attr('y', barH / 2 + 5).attr('font-size', 12).attr('fill', ink).text(b[1] + ' (' + (100 * b[1] / n).toFixed(0) + '%)');
+    });
+  });
+
+  /* ---- Q19 overall preference: butterfly + legend (Slide 7, right) ---- */
+  App.mount('s-06-pref', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var cX = css.getPropertyValue('--c-xjtu').trim() || '#1683a5';
+    var cE = css.getPropertyValue('--c-ext').trim() || '#c25e4c';
+    var muted = css.getPropertyValue('--muted').trim() || '#687780';
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+
+    var W = 470, H = 200, cx = 235, maxW = 170;
+
+    var svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('role', 'img')
+      .attr('aria-label', 'Overall preference among 7 both-users: XJTLU better 1, external better 4, about same 1, unable 1');
+
+    // legend (top): XJTLU teal · External terracotta · About same/Unable grey
+    var lg = [['XJTLU AI better', cX], ['External AI better', cE], ['About same / Unable', muted]];
+    var lx = 14;
+    lg.forEach(function (l) {
+      svg.append('rect').attr('x', lx).attr('y', 12).attr('width', 12).attr('height', 12).attr('fill', l[1]).attr('rx', 2);
+      svg.append('text').attr('x', lx + 17).attr('y', 23).attr('font-size', 11.5).attr('fill', ink).text(l[0]);
+      lx += 17 + l[0].length * 6.4 + 18;
+    });
+
+    svg.append('line').attr('x1', cx).attr('x2', cx).attr('y1', 40).attr('y2', 150).attr('stroke', '#cfd6d8').attr('stroke-width', 1.4);
+
+    var barH = 40, by = 62;
+    var wl = Math.max(10, (1 / 7) * maxW);
+    svg.append('rect').attr('x', cx - wl).attr('y', by).attr('width', wl).attr('height', barH).attr('fill', cX).attr('rx', 6);
+    svg.append('text').attr('x', cx - wl - 10).attr('y', by + barH / 2 + 5).attr('text-anchor', 'end').attr('font-size', 14).attr('font-weight', 800).attr('fill', cX).text('1');
+
+    var wr = (4 / 7) * maxW;
+    svg.append('rect').attr('x', cx).attr('y', by).attr('width', wr).attr('height', barH).attr('fill', cE).attr('rx', 6);
+    svg.append('text').attr('x', cx + wr + 10).attr('y', by + barH / 2 + 5).attr('font-size', 14).attr('font-weight', 800).attr('fill', cE).text('4');
+
+    svg.append('rect').attr('x', cx - 9).attr('y', by).attr('width', 18).attr('height', barH).attr('fill', muted).attr('rx', 4);
+    svg.append('text').attr('x', cx).attr('y', by + barH + 26).attr('text-anchor', 'middle').attr('font-size', 12).attr('fill', muted).text('About the same 1 · Unable to compare 1');
+    svg.append('text').attr('x', cx).attr('y', by + barH + 48).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', ink).text('n = 7 both-users (G1) · directional only');
+  });
+
+  /* ---- matched pairs (Slide 7) ---- */
+  App.mount('s-07-paired', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var cX = css.getPropertyValue('--c-xjtu').trim() || '#1683a5';
+    var cE = css.getPropertyValue('--c-ext').trim() || '#c25e4c';
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+    var muted = css.getPropertyValue('--muted').trim() || '#687780';
+
+    var pairs = [[4, 4], [5, 5], [3, 4], [4, 3], [5, 3]]; // [XJTLU, External]
+    var W = 780, left = 64, plotW = 640, pad = 66, rowH = 62, top = 46;
+    var H = top + pairs.length * rowH + 74;
+    function xs(v) { return left + pad + (v - 1) / 4 * (plotW - 2 * pad); }
+
+    var svg = d3.select(el).append('svg')
+      .attr('viewBox', '0 0 ' + W + ' ' + H)
+      .attr('role', 'img')
+      .attr('aria-label', 'Matched usefulness: five campus-resource pairs, median difference 0');
+
+    // legend
+    var lg = svg.append('g').attr('transform', 'translate(' + left + ',20)');
+    lg.append('circle').attr('cx', 0).attr('cy', 0).attr('r', 6).attr('fill', cX);
+    lg.append('text').attr('x', 11).attr('y', 5).attr('font-size', 12.5).attr('fill', ink).text('XJTLU AI');
+    lg.append('circle').attr('cx', 116).attr('cy', 0).attr('r', 6).attr('fill', cE);
+    lg.append('text').attr('x', 127).attr('y', 5).attr('font-size', 12.5).attr('fill', ink).text('External AI');
+
+    // useful-direction gradient band
+    var grad = svg.append('defs').append('linearGradient').attr('id', 'useful-grad').attr('x1', '0').attr('x2', '1');
+    grad.append('stop').attr('offset', '0').attr('stop-color', '#f0e4e0');
+    grad.append('stop').attr('offset', '1').attr('stop-color', '#e0eef3');
+    var pTop = top, pBot = top + pairs.length * rowH;
+    svg.append('rect').attr('x', xs(1) - 8).attr('y', pTop).attr('width', xs(5) - xs(1) + 16).attr('height', pBot - pTop)
+      .attr('fill', 'url(#useful-grad)').attr('opacity', 0.55);
+
+    // gridlines + 1..5 ticks
+    for (var v = 1; v <= 5; v++) {
+      svg.append('line').attr('x1', xs(v)).attr('x2', xs(v)).attr('y1', pTop).attr('y2', pBot)
+        .attr('stroke', '#d6dbdd').attr('stroke-width', 1);
+      svg.append('text').attr('x', xs(v)).attr('y', pBot + 18).attr('text-anchor', 'middle').attr('font-size', 13).attr('fill', muted).text(v);
+    }
+    svg.append('text').attr('x', xs(1)).attr('y', pBot + 36).attr('font-size', 11.5).attr('fill', muted).text('← Less useful');
+    svg.append('text').attr('x', xs(5)).attr('y', pBot + 36).attr('font-size', 11.5).attr('text-anchor', 'end').attr('fill', muted).text('More useful →');
+
+    pairs.forEach(function (p, i) {
+      var y = pTop + i * rowH + rowH / 2;
+      var diff = p[0] - p[1];
+      svg.append('text').attr('x', 0).attr('y', y + 5).attr('font-size', 12).attr('fill', ink).text('P' + (i + 1));
+      svg.append('line').attr('x1', xs(p[0])).attr('x2', xs(p[1])).attr('y1', y).attr('y2', y).attr('stroke', '#aab3b8').attr('stroke-width', 2);
+      svg.append('circle').attr('cx', xs(p[0])).attr('cy', y).attr('r', 7.5).attr('fill', cX).attr('stroke', '#fff').attr('stroke-width', 1.6);
+      svg.append('circle').attr('cx', xs(p[1])).attr('cy', y).attr('r', 7.5).attr('fill', cE).attr('stroke', '#fff').attr('stroke-width', 1.6);
+      var mid = (xs(p[0]) + xs(p[1])) / 2;
+      svg.append('text').attr('x', mid).attr('y', y - 12).attr('text-anchor', 'middle').attr('font-size', 11)
+        .attr('font-weight', 700).attr('fill', diff === 0 ? muted : (diff > 0 ? cX : cE)).text(diff > 0 ? '+' + diff : diff);
+    });
+
+    svg.append('text').attr('x', W / 2).attr('y', pBot + 58).attr('text-anchor', 'middle').attr('font-size', 12.5).attr('fill', ink)
+      .text('Median difference = 0 — no consistent edge (n = 5 matched pairs)');
+  });
+
+  /* ---- agreement distribution: violin plot (Slide 6 · new) ---- */
+  App.mount('s-06-agree', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+    var muted = css.getPropertyValue('--muted').trim() || '#687780';
+    var accent = css.getPropertyValue('--accent').trim() || '#1683a5';
+
+    var items = [
+      ['Useful for ADS401 tasks', [2, 2, 3, 3, 3, 3, 4]],
+      ['Improves learning efficiency', [1, 2, 2, 2, 3, 3, 4]],
+      ['Easy to use', [2, 2, 3, 3, 3, 4, 4]],
+      ['Easy to learn', [1, 2, 2, 2, 3, 4, 5]],
+      ['Trust the answers', [2, 2, 3, 3, 3, 4, 5]],
+      ['Accurate answers', [2, 2, 3, 3, 3, 3, 4]]
+    ];
+    var W = 860, labelW = 250, plotLeft = labelW + 16, plotW = 520, rowH = 74, top = 30;
+    var H = top + items.length * rowH + 36;
+    var y = d3.scaleLinear().domain([0.5, 5.5]).range([plotLeft, plotLeft + plotW]);
+    var bw = 0.55;
+
+    function gauss(x) { return Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI); }
+    function kde(vals) {
+      return function (x) {
+        var s = 0;
+        vals.forEach(function (v) { s += gauss((x - v) / bw); });
+        return s / (vals.length * bw);
+      };
+    }
+
+    var svg = d3.select(el).append('svg')
+      .attr('viewBox', '0 0 ' + W + ' ' + H)
+      .attr('role', 'img')
+      .attr('aria-label', 'Agreement distribution: six statements as violins, seven ratings each');
+
+    for (var v = 1; v <= 5; v++) {
+      svg.append('line').attr('x1', y(v)).attr('x2', y(v)).attr('y1', top).attr('y2', top + items.length * rowH).attr('stroke', '#e4e9ea').attr('stroke-width', 1);
+      svg.append('text').attr('x', y(v)).attr('y', H - 10).attr('text-anchor', 'middle').attr('font-size', 13).attr('fill', muted).text(v);
+    }
+    svg.append('text').attr('x', y(1)).attr('y', 14).attr('font-size', 11.5).attr('fill', muted).text('← Strongly disagree');
+    svg.append('text').attr('x', y(5)).attr('y', 14).attr('font-size', 11.5).attr('text-anchor', 'end').attr('fill', muted).text('Strongly agree →');
+
+    items.forEach(function (it, i) {
+      var cy = top + i * rowH + rowH / 2;
+      var vals = it[1];
+      var dens = kde(vals);
+      var maxD = 0;
+      for (var x = 0.5; x <= 5.5; x += 0.05) maxD = Math.max(maxD, dens(x));
+      var amp = rowH * 0.42;
+
+      var pts = [];
+      for (var x2 = 0.5; x2 <= 5.5; x2 += 0.1) pts.push({ x: x2, d: dens(x2) });
+      var area = d3.area()
+        .x(function (d) { return y(d.x); })
+        .y0(function (d) { return cy - d.d * amp / maxD; })
+        .y1(function (d) { return cy + d.d * amp / maxD; })
+        .curve(d3.curveBasis);
+      svg.append('path').attr('d', area(pts)).attr('fill', accent).attr('opacity', 0.32);
+
+      var med = d3.median(vals);
+      svg.append('line').attr('x1', y(med)).attr('x2', y(med)).attr('y1', cy - amp).attr('y2', cy + amp).attr('stroke', ink).attr('stroke-width', 2);
+
+      vals.forEach(function (v2, j) {
+        svg.append('circle').attr('cx', y(v2)).attr('cy', cy + ((j % 2) ? 6 : -6)).attr('r', 4).attr('fill', accent).attr('stroke', '#fff').attr('stroke-width', 1);
+      });
+
+      svg.append('text').attr('x', 0).attr('y', cy + 5).attr('font-size', 13).attr('fill', ink).text(it[0]);
+      svg.append('text').attr('x', y(5) + 16).attr('y', cy + 4).attr('font-size', 11.5).attr('font-weight', 700).attr('fill', ink).text('Md ' + med);
+    });
+  });
+
+  /* ---- interview coding: top codes (Slide 9) ---- */
+  App.mount('s-08-codes', function (el) {
+    var css = getComputedStyle(document.documentElement);
+    var accent = css.getPropertyValue('--accent').trim() || '#1683a5';
+    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
+
+    var codes = [
+      ['External better', 6],
+      ['Trial-then-abandon', 4],
+      ['Design generation', 4],
+      ['Course-awareness demand', 4],
+      ['Awareness channel', 3],
+      ['Translate / interpret', 3],
+      ['Summarize / organize', 3],
+      ['Cross-AI verification', 3],
+      ['UI / login friction', 3],
+      ['Slow response', 3],
+      ['Inaccurate info', 3],
+      ['Stats / SPSS help', 3]
+    ];
+    var W = 440, labelW = 200, barMax = 150, barH = 34;
+    var H = codes.length * barH;
+
+    var svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('role', 'img')
+      .attr('aria-label', 'Top interview codes by frequency');
+
+    codes.forEach(function (c, i) {
+      var y = i * barH;
+      var w = (c[1] / 6) * barMax;
+      var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
+      r.append('text').attr('x', 0).attr('y', barH / 2 + 5).attr('font-size', 12).attr('fill', ink).text(c[0]);
+      r.append('rect').attr('x', labelW).attr('y', 8).attr('width', Math.max(2, w)).attr('height', 13).attr('fill', accent).attr('rx', 3);
+      r.append('text').attr('x', labelW + Math.max(2, w) + 8).attr('y', barH / 2 + 5).attr('font-size', 12).attr('font-weight', 700).attr('fill', ink).text(c[1]);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
