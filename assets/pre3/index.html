@@ -120,7 +120,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .rail { width: 176px; flex-shrink: 0; display: flex; flex-direction: column; gap: 4px; padding-top: 14px; }
 .rail-head { font-size: .66rem; color: var(--muted); letter-spacing: .18em; text-transform: uppercase; margin: 0 0 10px 10px; }
-.rail-item { border: 1px solid transparent; background: transparent; text-align: left; color: var(--muted);
+.rail-item { width: 100%; border: 1px solid transparent; background: transparent; text-align: left; color: var(--muted);
   padding: 11px 12px; border-radius: 8px; display: flex; gap: 9px; align-items: center; font-size: .82rem; line-height: 1.3; }
 .rail-item span { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .66rem; }
 .rail-item:hover { background: var(--accent-soft); color: var(--ink); }
@@ -139,6 +139,13 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 .slide.active { display: flex; animation: slideIn .4s var(--ease); }
 @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---- cover ---- */
+.cover-content { text-align:center; margin:auto; max-width:1100px; padding:7vh 0 3vh; }
+.cover-content h1 { font-size:clamp(2.4rem,4vw,4rem); line-height:1.12; letter-spacing:-.025em; color:var(--ink-strong); margin:1rem 0 1.5rem; }
+.cover-subtitle { font-size:clamp(1.35rem,2.1vw,2rem); line-height:1.35; color:var(--muted); }
+.cover-members { margin:3rem 0 2rem; font-size:clamp(1rem,1.35vw,1.3rem); color:var(--ink); }
+.cover-resource { color:var(--muted); line-height:1.8; font-size:1rem; }
 
 /* ---- slide content (pre2 flat regions) ---- */
 .slide .kicker { display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .15em;
@@ -284,6 +291,20 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .slide.active { animation: none; }
 }
+
+/* ═══════════════ PRINT (PDF export — one slide starts per page, nothing clipped) ═══════════════ */
+.print-slide-inner { display: contents; }
+@page { size: 16in 9in; margin: 0; }
+@media print {
+  html, body { width: 16in !important; height: auto !important; margin: 0 !important; overflow: visible !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .shell, .main, .slideframe { display: block !important; width: 16in !important; height: auto !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; margin: 0 !important; border: 0 !important; border-radius: 0 !important; overflow: visible !important; }
+  .topbar, .rail, .bottombar, .story-note, #tooltip { display: none !important; }
+  .slide, .slide.active { display: block !important; position: relative !important; inset: auto !important; box-sizing: border-box !important; width: 16in !important; min-height: 9in !important; height: 9in !important; overflow: hidden !important; padding: .45in .55in !important; break-inside: avoid !important; page-break-inside: avoid !important; animation: none !important; }
+  .print-slide-inner { display: block !important; transform-origin: top left; }
+  .slide + .slide { break-before: page !important; page-break-before: always !important; }
+  .viz, .joint, .two-col, .three-col, .pipeline, .reflect { break-inside: avoid !important; page-break-inside: avoid !important; }
+  .viz svg { width: 100% !important; max-width: 100% !important; }
+}
 </style>
 </head>
 
@@ -292,10 +313,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 <div class="shell">
   <!-- ═══════════════ TOPBAR ═══════════════ -->
   <header class="topbar">
-    <div class="brand"><b><span class="tag">ADS401</span> · XJTLU AI — Awareness, Adoption &amp; Use</b></div>
+    <div class="brand"><b>ADS401 Students’ Perspective on AI Agents at XJTLU</b></div>
     <div class="topright">
-      <span class="capsule live">● DATA-DRIVEN</span>
-      <span class="capsule">27 SURVEYS + 7 INTERVIEWS</span>
+      <span class="group-label">Group A</span>
+      <a class="toolbar-btn" href="https://lionchena.github.io/ads401/" target="_blank" rel="noopener noreferrer">Home ↗</a>
       <button class="toolbar-btn" id="notesBtn" title="Toggle speaker notes (N)">Speaker notes N</button>
       <button class="toolbar-btn" id="fullBtn" title="Fullscreen (F)">Fullscreen F ↗</button>
     </div>
@@ -306,14 +327,24 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <nav class="rail" aria-label="Slides">
       <div class="rail-head">Presentation · Pre3</div>
       <div id="rail-items"></div>
-      <div class="rail-foot">← → / Space to navigate<br>1–9 to jump<br>N notes · F fullscreen</div>
+      <div class="rail-foot">← → / Space to navigate<br>1–9 to jump · End for Q&amp;A<br>N notes · F fullscreen</div>
     </nav>
 
     <div class="slideframe" id="frame">
 
+      <section class="slide active" data-label="Cover" data-note="Welcome. We are Group A. Our study examines ADS401 students’ perspectives on AI agents at XJTLU. The project website is linked on this cover.">
+        <div class="cover-content">
+          <span class="kicker">ADS401 · Group A</span>
+          <h1>Evaluating AI Integration at XJTLU</h1>
+          <p class="cover-subtitle">ADS401 Students’ Perspective<br>on AI Agents at XJTLU</p>
+          <p class="cover-members">Hongcheng TANG · Mingjian TAO · Liyuan CHEN · Haode SHEN</p>
+          <p class="cover-resource">Project resource<br><a class="q-link" href="https://lionchena.github.io/ads401/" target="_blank" rel="noopener noreferrer">lionchena.github.io/ads401/ ↗</a></p>
+        </div>
+      </section>
+
       <!-- ─────────────── SLIDE 1 · Research Focus & Questions ─────────────── -->
-      <section class="slide active" data-label="Research Focus &amp; Questions"
-               data-note="Research focus: why is a widely-known campus AI not necessarily a common study tool? We target 44 eligible ADS401 students, receive 27 submissions (one cross-language duplicate respondent) and 7 interviews. This is an observational study — no causal claims.">
+      <section class="slide" data-label="Research Focus &amp; Questions"
+               data-note="Our three research questions concern awareness and adoption, academic use, and perceived benefits and barriers. Of 44 eligible students, we received 27 submissions; 26 distinct IDs remain subject to review.">
         <span class="kicker">Research Focus &amp; Questions</span>
         <h2 class="section-title">ADS401 Students' Perspective on AI Agents at XJTLU</h2>
         <p class="lead">XJTLU provides AI services such as Junmou AI to support learning, yet ADS401 students' awareness, adoption and use of these tools remain unclear. This study explores their use or non-use of XJTLU AI and the reasons behind their choices, to inform future improvements.</p>
@@ -366,7 +397,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
       <!-- ─────────────── SLIDE 2 · Study Design & Data Collection ─────────────── -->
       <section class="slide" data-label="Study Design &amp; Data Collection"
-               data-note="Design: 48 enrolled → 44 eligible invitees → 27 responses (61.4%) and 7 interviews. Q9 splits respondents into four usage groups. The survey is cross-sectional and non-experimental — the 27→2 states are different definition slices, not a tracked attrition path. Interview 'trial' is historical, not the survey's four-week G1.">
+               data-note="This is an observational, explanatory sequential mixed-methods study: a cross-sectional survey followed by seven purposive interviews. Q9 identifies seven both-users, fifteen external-only, four neither, and one XJTLU-only record. These are not experimental conditions.">
         <span class="kicker">Study Design &amp; Data Collection</span>
         <h2 class="section-title">How we collected the evidence</h2>
         <p class="lead">A non-experimental, cross-sectional online survey (Q1–Q24) followed by purposive follow-up interviews. Participation was voluntary; no conditions were assigned.</p>
@@ -406,7 +437,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
       <!-- ─────────────── SLIDE 3 · RQ1 Awareness & Adoption ─────────────── -->
       <section class="slide" data-label="RQ1 · Awareness &amp; Adoption"
-               data-note="RQ1: 24 of 27 have heard of XJTLU AI, 15 ever used it (of 26 who answered), 8 used it in the past four weeks, 2 use it 5+ times. These are different state slices from different questions — not a tracked conversion funnel.">
+               data-note="Awareness and use are separate cross-sectional measures: 24 of 27 records report awareness, 15 of 26 valid answers report ever-use, and eight of 27 report recent use. This is not a measured retention funnel.">
         <span class="kicker">RQ1 · Awareness &amp; Adoption</span>
         <h2 class="section-title">High awareness, limited recent adoption</h2>
         <p class="lead">A cross-sectional snapshot of awareness, prior use and recent academic engagement — different state slices, not a tracked conversion funnel. n = 27 submissions.</p>
@@ -420,9 +451,9 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
       <!-- ─────────────── SLIDE 4 · RQ2 Usage Patterns ─────────────── -->
       <section class="slide" data-label="RQ2 · Usage Patterns"
-               data-note="RQ2: XJTLU AI users (n=8) report campus resources 8/8 (pending form audit — possible default-select). External AI users (n=22) use it across in-course content 13, campus 10, beyond-course 8, production 8, policy 5. Different denominators.">
+               data-note="External AI was used for in-course content by 13 of 22 users. All eight recent XJTLU users selected campus resources; the Q11 form and export require audit. Categories are multiple-select, groups overlap, and denominators differ.">
         <span class="kicker">RQ2 · Usage Patterns</span>
-        <h2 class="section-title">External AI spans learning; XJTLU AI centres on campus resources</h2>
+        <h2 class="section-title">Different tools, different activities</h2>
         <p class="lead">Five activity categories compared across the two tools. XJTLU AI users = <span class="g-tag g1">G1</span> + <span class="g-tag g4">G4</span> (n=8); External AI users = <span class="g-tag g1">G1</span> + <span class="g-tag g2">G2</span> (n=22).</p>
         <hr class="hairline">
         <div class="slide-body">
@@ -433,38 +464,19 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       </section>
 
       <!-- ─────────────── SLIDE 5 · RQ3 Perceived Experience ─────────────── -->
-      <section class="slide" data-label="RQ3 · Perceived Experience"
-               data-note="RQ3 experience: n=27 → recent users 8 → valid ratings 7 (+1 N/A). Medians: useful 3, efficiency 2, easy-to-use 3, easy-to-learn 2, trust 3, accurate 3. Exploratory — not a validated TAM scale, n=7.">
-        <span class="kicker">RQ3 · Perceived Experience</span>
-        <h2 class="section-title">Perceptions vary among seven respondents</h2>
-        <p class="lead">Agreement (1–5) among recent XJTLU AI users (<span class="g-tag g1">G1</span> + <span class="g-tag g4">G4</span>, n=8): n=27 → recent users 8 → valid ratings 7 (+1 N/A). Too few to generalise.</p>
-        <hr class="hairline">
-        <div class="slide-body">
-          <div class="viz" data-viz="s-05-likert"></div>
-          <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#based-on-your-overall-experience-using-xjtlu-ai-in-ads401-how-much-do-you-agree-with-these-statements-select-na-if-you-cannot-judge">Q13</a> · 6 items · medians 3, 2, 3, 2, 3, 3. Exploratory, context-specific items — not the complete validated TAM. Ratings co-vary across constructs (ρ ≈ .86–.94, n = 7) — descriptive only.</p>
-        </div>
-        <p class="takeaway">Ratings are mixed; ease-of-use items trend lower — but n=7 cannot support strong claims.</p>
-      </section>
-
-      <!-- ─────────────── SLIDE 6 · RQ3 Agreement distribution ─────────────── -->
-      <section class="slide" data-label="Agreement Distribution"
-               data-note="Agreement distribution: each dot is one of the 7 valid ratings (1 strongly disagree … 5 strongly agree), jittered for readability. Ratings cluster at 3 neutral; easy-to-learn dips to 1–2. Median per statement shown as a vertical band.">
-        <span class="kicker">RQ3 · Agreement Distribution</span>
-        <h2 class="section-title">Agreement distribution: ratings cluster neutral-to-positive</h2>
-        <p class="lead">Each dot is one of the 7 valid ratings from recent XJTLU AI users (<span class="g-tag g1">G1</span> + <span class="g-tag g4">G4</span>): 1 = strongly disagree … 5 = strongly agree, jittered for readability. Medians shown per statement.</p>
-        <hr class="hairline">
-        <div class="slide-body">
-          <div class="viz" data-viz="s-06-agree"></div>
-          <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#based-on-your-overall-experience-using-xjtlu-ai-in-ads401-how-much-do-you-agree-with-these-statements-select-na-if-you-cannot-judge">Q13</a> · 6 statements · n = 7 valid (+1 N/A). Ease-of-use items dip toward 1–2.</p>
-        </div>
-        <p class="takeaway">Ratings concentrate around neutral; no statement reaches confident positive agreement.</p>
-      </section>
+      <section class="slide" data-label="RQ3 · Perceived Experience" data-note="Each of six perception items has seven valid ratings and one N/A. At least five ratings per item are neutral or negative. Median efficiency and task-specific ease are two; all others are three. Questionnaire v2 Q14 maps by item wording to analysis Q13. This does not validate TAM.">
+<span class="kicker">RQ3 · Perceived Experience</span>
+<h2 class="section-title">At least 5 of 7 ratings are neutral or negative on every item</h2>
+<p class="lead">Recent XJTLU AI users (G1 + G4, n=8). Each dot is one valid answer; repeated ratings are stacked, not smoothed. Each item has 7 valid answers + 1 N/A.</p>
+<hr class="hairline"><div class="slide-body"><div class="viz" data-viz="s-05-observed"><svg viewBox="0 0 1080 390" role="img" aria-labelledby="perception-title perception-desc"><g aria-hidden="true"><rect x="0" y="51" width="1080" height="53" fill="#f4f7f7"/><rect x="0" y="157" width="1080" height="53" fill="#f4f7f7"/><rect x="0" y="263" width="1080" height="53" fill="#f4f7f7"/></g><title id="perception-title">Six perception items: seven observed ratings and one N/A each</title><desc id="perception-desc">One dot per valid answer, stacked vertically at its integer rating. Medians are 3, 2, 3, 2, 3, 3. At least five of seven ratings per item are at or below neutral.</desc><line x1="555" x2="555" y1="49" y2="368" stroke="#e4e9ea"/><text x="555" y="20" text-anchor="middle" font-size="14" fill="#172327">1</text><line x1="635" x2="635" y1="49" y2="368" stroke="#e4e9ea"/><text x="635" y="20" text-anchor="middle" font-size="14" fill="#172327">2</text><line x1="715" x2="715" y1="49" y2="368" stroke="#e4e9ea"/><text x="715" y="20" text-anchor="middle" font-size="14" fill="#172327">3</text><line x1="795" x2="795" y1="49" y2="368" stroke="#e4e9ea"/><text x="795" y="20" text-anchor="middle" font-size="14" fill="#172327">4</text><line x1="875" x2="875" y1="49" y2="368" stroke="#e4e9ea"/><text x="875" y="20" text-anchor="middle" font-size="14" fill="#172327">5</text><text x="530" y="40" font-size="12" fill="#687780">Disagree</text><text x="715" y="40" text-anchor="middle" font-size="12" fill="#687780">Neutral</text><text x="900" y="40" text-anchor="end" font-size="12" fill="#687780">Agree</text><text x="955" y="25" text-anchor="middle" font-size="13" fill="#687780">Median</text><text x="1035" y="25" text-anchor="middle" font-size="13" fill="#687780">N/A</text><text x="0" y="72" font-size="17" fill="#172327">Helps complete ADS401 tasks</text><text x="0" y="90" font-size="17" fill="#172327">more effectively</text><circle cx="635" cy="71.5" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more effectively: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="82.5" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more effectively: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="60.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="71.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="82.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="93.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="795" cy="77.0" r="4.5" fill="#7fb8cc"><title>Helps complete ADS401 tasks more effectively: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="82" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">3</text><text x="1035" y="82" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="125" font-size="17" fill="#172327">Helps complete ADS401 tasks</text><text x="0" y="143" font-size="17" fill="#172327">more efficiently</text><circle cx="555" cy="130.0" r="4.5" fill="#b3403a"><title>Helps complete ADS401 tasks more efficiently: rating 1, 1/7 responses at this rating</title></circle><circle cx="635" cy="119.0" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="130.0" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="141.0" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="715" cy="124.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more efficiently: rating 3, 2/7 responses at this rating</title></circle><circle cx="715" cy="135.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more efficiently: rating 3, 2/7 responses at this rating</title></circle><circle cx="795" cy="130.0" r="4.5" fill="#7fb8cc"><title>Helps complete ADS401 tasks more efficiently: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="135" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">2</text><text x="1035" y="135" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="188" font-size="17" fill="#172327">Easy to learn how to use</text><circle cx="635" cy="177.5" r="4.5" fill="#d98c86"><title>Easy to learn how to use: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="188.5" r="4.5" fill="#d98c86"><title>Easy to learn how to use: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="172.0" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="183.0" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="194.0" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="795" cy="177.5" r="4.5" fill="#7fb8cc"><title>Easy to learn how to use: rating 4, 2/7 responses at this rating</title></circle><circle cx="795" cy="188.5" r="4.5" fill="#7fb8cc"><title>Easy to learn how to use: rating 4, 2/7 responses at this rating</title></circle><text x="955" y="188" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">3</text><text x="1035" y="188" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="241" font-size="17" fill="#172327">Easy to use for my ADS401 tasks</text><circle cx="555" cy="236.0" r="4.5" fill="#b3403a"><title>Easy to use for my ADS401 tasks: rating 1, 1/7 responses at this rating</title></circle><circle cx="635" cy="225.0" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="236.0" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="247.0" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="715" cy="236.0" r="4.5" fill="#aca2a9"><title>Easy to use for my ADS401 tasks: rating 3, 1/7 responses at this rating</title></circle><circle cx="795" cy="236.0" r="4.5" fill="#7fb8cc"><title>Easy to use for my ADS401 tasks: rating 4, 1/7 responses at this rating</title></circle><circle cx="875" cy="236.0" r="4.5" fill="#1683a5"><title>Easy to use for my ADS401 tasks: rating 5, 1/7 responses at this rating</title></circle><text x="955" y="241" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">2</text><text x="1035" y="241" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="284" font-size="17" fill="#172327">Usually provides information</text><text x="0" y="302" font-size="17" fill="#172327">I consider reliable</text><circle cx="635" cy="283.5" r="4.5" fill="#d98c86"><title>Usually provides information I consider reliable: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="294.5" r="4.5" fill="#d98c86"><title>Usually provides information I consider reliable: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="278.0" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="289.0" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="300.0" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="795" cy="289.0" r="4.5" fill="#7fb8cc"><title>Usually provides information I consider reliable: rating 4, 1/7 responses at this rating</title></circle><circle cx="875" cy="289.0" r="4.5" fill="#1683a5"><title>Usually provides information I consider reliable: rating 5, 1/7 responses at this rating</title></circle><text x="955" y="294" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">3</text><text x="1035" y="294" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="347" font-size="17" fill="#172327">I generally trust XJTLU AI’s explanations</text><circle cx="635" cy="336.5" r="4.5" fill="#d98c86"><title>I generally trust XJTLU AI’s explanations: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="347.5" r="4.5" fill="#d98c86"><title>I generally trust XJTLU AI’s explanations: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="325.5" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="336.5" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="347.5" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="358.5" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="795" cy="342.0" r="4.5" fill="#7fb8cc"><title>I generally trust XJTLU AI’s explanations: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="347" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">3</text><text x="1035" y="347" text-anchor="middle" font-size="16" fill="#687780">1</text></svg></div>
+<p class="footnote">Questionnaire v2: <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#14-based-on-your-overall-experience-using-xjtlu-ai-in-ads401-how-much-do-you-agree-with-these-statements-select-na-if-you-cannot-judge" target="_blank" rel="noopener noreferrer">Q14</a> · Analysis/codebook: Q13 (q13_*); matched by the six item wordings. Scale: 1 strongly disagree → 5 strongly agree; N/A excluded from medians. Source: <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md" target="_blank" rel="noopener noreferrer">questionnaire</a> + survey_wide.csv (research dataset). Item wording omits the repeated subject “XJTLU AI”.</p>
+</div><p class="takeaway">Efficiency and ease of use for ADS401 tasks have median 2; the other items have median 3. Small-sample descriptions, not TAM validation.</p></section>
 
       <!-- ─────────────── SLIDE 6 · RQ3 Barriers & Comparison ─────────────── -->
       <section class="slide" data-label="RQ3 · Barriers &amp; Comparison"
-               data-note="RQ3 barriers: among external-only users (G2, n=15), 9 prefer external AI and 6 are unclear what XJTLU AI does. Overall preference among both-users (G1, n=7): external 4, XJTLU 1, about the same 1, unable to compare 1.">
+               data-note="Among 15 external-only records, nine selected preference for external AI and six selected unclear capabilities. Among seven both-user records, four preferred external, one XJTLU, one reported about the same, and one could not compare. These are self-reported preferences, not objective performance.">
         <span class="kicker">RQ3 · Barriers &amp; Comparison</span>
-        <h2 class="section-title">Non-users cite habit and unfamiliarity; overall preference tilts external</h2>
+        <h2 class="section-title">External preference and unclear capabilities lead</h2>
         <p class="lead">Why external-only users (<span class="g-tag g2">G2</span>, n=15) do not use XJTLU AI — and overall preference among both-users (<span class="g-tag g1">G1</span>, n=7).</p>
         <hr class="hairline">
         <div class="slide-body">
@@ -480,12 +492,12 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
           </div>
           <p class="footnote"><a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#what-are-your-main-reasons-for-not-using-xjtlu-ai-for-ads401-during-the-past-four-weeks-select-up-to-3">Q16</a> (G2) · <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#for-each-activity-category-where-you-used-both-xjtlu-ai-and-external-ai-in-the-past-four-weeks-which-worked-better-in-your-actual-experience-choose-unable-to-compare-where-appropriate">Q19</a> (G1). “Unable to compare” is a real response, not missing data.</p>
         </div>
-        <p class="takeaway">Habit and unfamiliarity outweigh perceived quality concerns in this small sample.</p>
+        <p class="takeaway">Preference and unclear capabilities are the most selected reasons among G2; preferences are self-reported.</p>
       </section>
 
       <!-- ─────────────── SLIDE 7 · Matched Comparison ─────────────── -->
       <section class="slide" data-label="Matched Comparison"
-               data-note="Matched usefulness (Q11a×Q18b) for the same activity, both-users. Campus resources has 5 valid pairs with differences 0, 0, -1, +1, +2 — median 0. Other activities have 0–1 pairs. No consistent edge.">
+               data-note="For the same campus-resource activity, only five valid paired ratings are available: two favour XJTLU, two tie, and one favours external. Median difference is zero. Other activities have zero or one pair; this establishes neither equivalence nor superiority.">
         <span class="kicker">Matched Comparison</span>
         <h2 class="section-title">No consistent edge where both tools were used</h2>
         <p class="lead">Paired usefulness ratings (Q11a × Q18b) for the same activity among both-users (<span class="g-tag g1">G1</span>, n=7). Campus resources is the only activity with enough pairs (5).</p>
@@ -499,7 +511,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
       <!-- ─────────────── SLIDE 9 · Interviews: coding & themes ─────────────── -->
       <section class="slide" data-label="Interviews · Coding &amp; Themes"
-               data-note="Interviews: 7 semi-structured, de-identified interviews (P001–P007, Nov 2026), purposive sampling. 25 codes → 7 themes. Top codes: external-better 6, trial-then-abandon 4, design-generation 4, course-awareness-demand 4. Historical trial ≠ four-week G1.">
+               data-note="The supplied coding organises seven interviews using 25 codes and seven themes. Treat theme labels as interpretations of these cases, not population prevalence. Historical trial is distinct from Q9 use in the past four weeks; interview timelines and survey linkage need review.">
         <span class="kicker">Qualitative · Interviews</span>
         <h2 class="section-title">Seven interviews: 25 codes → 7 themes</h2>
         <p class="lead">Semi-structured interviews with 7 de-identified participants (P001–P007), purposively sampled (Nov 2026). Historical trial ≠ the survey's four-week G1.</p>
@@ -529,7 +541,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
       <!-- ─────────────── SLIDE 8 · Qualitative Evidence & Conclusions ─────────────── -->
       <section class="slide" data-label="Qualitative Evidence &amp; Conclusions"
-               data-note="Joint display: each survey pattern is traced to interview evidence and a possible HCI opportunity. Interviews describe historical trial, not the survey's four-week G1. Limitations: small n, cross-sectional, self-reported, exploratory correlations.">
+               data-note="Use the joint display cautiously: P002 describes official-resource lookup and P006 asks for course relevance and describes web/source checking. Interview examples contextualise survey patterns but do not establish causes. Candidate design ideas require evaluation; resolve the duplicate ID and audit Q11.">
         <span class="kicker">Qualitative Evidence &amp; Conclusions</span>
         <h2 class="section-title">Interviews explain the gap — within clear limits</h2>
         <p class="lead">Joint display: survey pattern → interview evidence → possible HCI opportunity. 7 semi-structured interviews (P001–P007, Nov 2026). Interview “trial” is historical, not the survey's four-week <span class="g-tag g1">G1</span>.</p>
@@ -563,15 +575,31 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         <p class="takeaway">Design opportunities are traceable to findings — presented as hypotheses, not causal claims.</p>
       </section>
 
+      <section class="slide" data-label="Q&amp;A · Materials" data-note="Thank you. Invite questions. The project home and GitHub materials are linked here; the slide also records DeepSeek and ChatGPT/Codex assistance.">
+        <span class="kicker">ADS401 · Group A</span>
+        <h2 class="section-title">Questions &amp; Answers</h2>
+        <p class="lead">Thank you for listening.</p>
+        <hr class="hairline">
+        <div class="slide-body">
+          <h3 class="block-head">Materials</h3>
+          <p><a class="q-link" href="https://github.com/LionChenA/ads401" target="_blank" rel="noopener noreferrer">Project repository on GitHub ↗</a> &nbsp;·&nbsp; <a class="q-link" href="https://lionchena.github.io/ads401/" target="_blank" rel="noopener noreferrer">Group A project home ↗</a></p>
+          <div class="block">
+            <h3 class="block-head">AI usage</h3>
+            <p>[1] <a class="q-link" href="https://www.deepseek.com/" target="_blank" rel="noopener noreferrer">DeepSeek</a> (DeepSeek). Used to organise questionnaire and interview materials, transcribe audio into text, format data, and assist with drafting.</p>
+            <p>[2] <a class="q-link" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT / Codex</a> (OpenAI). Used to prepare and deploy the questionnaire, generate and revise visualisations and slides, maintain the GitHub Pages site, organise supplied research materials, and prepare speaker notes.</p>
+          </div>
+        </div>
+      </section>
+
     </div>
   </main>
 
   <!-- ═══════════════ BOTTOMBAR ═══════════════ -->
   <footer class="bottombar">
     <div class="progress">
-      <span class="slide-num" id="slidecounter">01 / 03</span>
+      <span class="slide-num" id="slidecounter">01 / 11</span>
       <div class="track"><div class="fill" id="progress-fill"></div></div>
-      <span class="kbd-hint">← → to navigate · N notes · F fullscreen</span>
+      
     </div>
     <div class="foot-controls">
       <button class="control" id="prev" title="Previous" aria-label="Previous slide">←</button>
@@ -818,7 +846,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     head.innerHTML = '<div class="legend" style="margin:0">' +
       '<span class="li"><i class="sw" style="background:' + cX + '"></i>XJTLU AI · n=' + nX + '</span>' +
       '<span class="li"><i class="sw" style="background:' + cE + '"></i>External AI · n=' + nE + '</span></div>' +
-      '<div class="seg"><button data-mode="count" class="active">Count 数量</button><button data-mode="pct">% share 占比</button></div>';
+      '<div class="seg"><button data-mode="count" class="active">count </button><button data-mode="pct">% share </button></div>';
 
     var svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('role', 'img')
       .attr('aria-label', 'Activity usage butterfly: XJTLU AI left, External AI right');
@@ -831,8 +859,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     function draw() {
       svg.selectAll('*').remove();
       var bot = plotTop + cats.length * rowH;
-      svg.append('line').attr('x1', centerX).attr('x2', centerX).attr('y1', plotTop - 20).attr('y2', bot - 10)
-        .attr('stroke', '#cfd6d8').attr('stroke-width', 1.4);
+
 
       ticks().forEach(function (t) {
         var lx = centerX - halfLabel - (t / maxV()) * barLen;
@@ -873,66 +900,6 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     draw();
   });
 
-  /* ---- Q13 diverging stacked bars (Slide 5) — vertical legend + hover ---- */
-  App.mount('s-05-likert', function (el) {
-    var css = getComputedStyle(document.documentElement);
-    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
-    var muted = css.getPropertyValue('--muted').trim() || '#687780';
-
-    var items = [
-      ['Useful for ADS401 tasks', [0, 2, 4, 1, 0], 3],
-      ['Improves learning efficiency', [1, 3, 2, 1, 0], 2],
-      ['Easy to use', [0, 2, 3, 2, 0], 3],
-      ['Easy to learn', [1, 3, 1, 1, 1], 2],
-      ['Trust the answers', [0, 2, 3, 1, 1], 3],
-      ['Accurate answers', [0, 2, 4, 1, 0], 3]
-    ];
-    // 1=strong disagree → 5=strong agree; 3 is the mid-transition tone; N/A grey
-    var colors = ['#b3403a', '#d98c86', '#aca2a9', '#7fb8cc', '#1683a5'];
-    var levelLabels = ['1 Strongly disagree', '2 Disagree', '3 Neutral', '4 Agree', '5 Strongly agree'];
-    var W = 920, labelW = 250, barW = 300, topH = 58, barH = 42;
-    var H = topH + items.length * barH + 6;
-
-    var svg = d3.select(el).append('svg')
-      .attr('viewBox', '0 0 ' + W + ' ' + H)
-      .attr('role', 'img')
-      .attr('aria-label', 'Q13 Likert ratings: six items, seven valid responses each, one N/A');
-
-    // vertical column legend: coloured swatch + rotated label above each column
-    var segW = barW / 5;
-    for (var k = 0; k < 5; k++) {
-      var cx = labelW + k * segW + segW / 2;
-      svg.append('rect').attr('x', labelW + k * segW + 1).attr('y', 8).attr('width', segW - 2).attr('height', 14).attr('fill', colors[k]).attr('rx', 2);
-      svg.append('text').attr('x', cx).attr('y', 40).attr('transform', 'rotate(-28 ' + cx + ' 40)')
-        .attr('text-anchor', 'end').attr('font-size', 10.5).attr('fill', muted).text(levelLabels[k]);
-    }
-    // N/A swatch (grey) to the right of the bars
-    var naX = labelW + barW + 14;
-    svg.append('rect').attr('x', naX).attr('y', 8).attr('width', 16).attr('height', 14).attr('fill', '#d6d6d6').attr('rx', 2);
-    svg.append('text').attr('x', naX + 8).attr('y', 40).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', muted).text('N/A');
-
-    items.forEach(function (it, i) {
-      var y = topH + i * barH;
-      var dist = it[1], med = it[2];
-      var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
-      r.append('text').attr('x', 0).attr('y', barH / 2 + 5).attr('font-size', 13).attr('fill', ink).text(it[0]);
-
-      dist.forEach(function (cnt, k) {
-        var w = segW * cnt;
-        if (w > 0) r.append('rect').attr('x', labelW + k * segW + 1).attr('y', 8).attr('width', w - 2).attr('height', 18).attr('fill', colors[k]).attr('rx', 2)
-          .on('mouseenter', function (ev) { showTip('<b style="color:' + colors[k] + '">' + (k + 1) + ' · ' + levelLabels[k].slice(2) + '</b><br>' + it[0] + '<br>' + cnt + ' of 7 respondents', ev); })
-          .on('mousemove', function (ev) { var t = document.getElementById('tooltip'); t.style.left = Math.min(window.innerWidth - 320, Math.max(12, ev.clientX + 16)) + 'px'; t.style.top = Math.min(window.innerHeight - 120, Math.max(12, ev.clientY + 16)) + 'px'; })
-          .on('mouseleave', function () { hideTip(); });
-      });
-      // median marker
-      r.append('line').attr('x1', labelW + (med - 0.5) * segW).attr('x2', labelW + (med - 0.5) * segW).attr('y1', 3).attr('y2', 30).attr('stroke', ink).attr('stroke-width', 1.6);
-      r.append('text').attr('x', labelW + (med - 0.5) * segW + 4).attr('y', 9).attr('font-size', 10).attr('fill', ink).attr('font-weight', 700).text('Md ' + med);
-    });
-
-    // single N/A note
-    svg.append('text').attr('x', labelW).attr('y', H - 2).attr('font-size', 11).attr('fill', muted).text('Each statement has 1 N/A (n = 7 valid + 1 N/A)');
-  });
-
   /* ---- G2 barriers (Slide 6, left) ---- */
   App.mount('s-06-barriers', function (el) {
     var css = getComputedStyle(document.documentElement);
@@ -967,40 +934,9 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   /* ---- Q19 overall preference: butterfly + legend (Slide 7, right) ---- */
   App.mount('s-06-pref', function (el) {
-    var css = getComputedStyle(document.documentElement);
-    var cX = css.getPropertyValue('--c-xjtu').trim() || '#1683a5';
-    var cE = css.getPropertyValue('--c-ext').trim() || '#c25e4c';
-    var muted = css.getPropertyValue('--muted').trim() || '#687780';
-    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
-
-    var W = 470, H = 200, cx = 235, maxW = 170;
-
-    var svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('role', 'img')
-      .attr('aria-label', 'Overall preference among 7 both-users: XJTLU better 1, external better 4, about same 1, unable 1');
-
-    // legend (top): XJTLU teal · External terracotta · About same/Unable grey
-    var lg = [['XJTLU AI better', cX], ['External AI better', cE], ['About same / Unable', muted]];
-    var lx = 14;
-    lg.forEach(function (l) {
-      svg.append('rect').attr('x', lx).attr('y', 12).attr('width', 12).attr('height', 12).attr('fill', l[1]).attr('rx', 2);
-      svg.append('text').attr('x', lx + 17).attr('y', 23).attr('font-size', 11.5).attr('fill', ink).text(l[0]);
-      lx += 17 + l[0].length * 6.4 + 18;
-    });
-
-    svg.append('line').attr('x1', cx).attr('x2', cx).attr('y1', 40).attr('y2', 150).attr('stroke', '#cfd6d8').attr('stroke-width', 1.4);
-
-    var barH = 40, by = 62;
-    var wl = Math.max(10, (1 / 7) * maxW);
-    svg.append('rect').attr('x', cx - wl).attr('y', by).attr('width', wl).attr('height', barH).attr('fill', cX).attr('rx', 6);
-    svg.append('text').attr('x', cx - wl - 10).attr('y', by + barH / 2 + 5).attr('text-anchor', 'end').attr('font-size', 14).attr('font-weight', 800).attr('fill', cX).text('1');
-
-    var wr = (4 / 7) * maxW;
-    svg.append('rect').attr('x', cx).attr('y', by).attr('width', wr).attr('height', barH).attr('fill', cE).attr('rx', 6);
-    svg.append('text').attr('x', cx + wr + 10).attr('y', by + barH / 2 + 5).attr('font-size', 14).attr('font-weight', 800).attr('fill', cE).text('4');
-
-    svg.append('rect').attr('x', cx - 9).attr('y', by).attr('width', 18).attr('height', barH).attr('fill', muted).attr('rx', 4);
-    svg.append('text').attr('x', cx).attr('y', by + barH + 26).attr('text-anchor', 'middle').attr('font-size', 12).attr('fill', muted).text('About the same 1 · Unable to compare 1');
-    svg.append('text').attr('x', cx).attr('y', by + barH + 48).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', ink).text('n = 7 both-users (G1) · directional only');
+    var data = [['External AI', 4, '#c25e4c'], ['XJTLU AI', 1, '#1683a5'], ['About the same', 1, '#89989e'], ['Unable to compare', 1, '#b5c0c3']];
+    var svg = d3.select(el).append('svg').attr('viewBox', '0 0 470 210').attr('role','img').attr('aria-label','Overall preference: external 4, XJTLU 1, same 1, unable 1 of 7');
+    data.forEach(function(d,i) { var y=15+i*44; svg.append('text').attr('x',0).attr('y',y+19).attr('font-size',15).attr('fill','#172327').text(d[0]); svg.append('rect').attr('x',170).attr('y',y).attr('width',d[1]*48).attr('height',23).attr('fill',d[2]).attr('rx',3); svg.append('text').attr('x',180+d[1]*48).attr('y',y+18).attr('font-size',15).attr('font-weight',700).text(d[1]+' / 7'); });
   });
 
   /* ---- matched pairs (Slide 7) ---- */
@@ -1011,7 +947,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
     var muted = css.getPropertyValue('--muted').trim() || '#687780';
 
-    var pairs = [[4, 4], [5, 5], [3, 4], [4, 3], [5, 3]]; // [XJTLU, External]
+    var pairs = [[2, 2], [5, 5], [1, 2], [3, 2], [4, 2]]; // [XJTLU, External]
     var W = 780, left = 64, plotW = 640, pad = 66, rowH = 62, top = 46;
     var H = top + pairs.length * rowH + 74;
     function xs(v) { return left + pad + (v - 1) / 4 * (plotW - 2 * pad); }
@@ -1028,13 +964,7 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     lg.append('circle').attr('cx', 116).attr('cy', 0).attr('r', 6).attr('fill', cE);
     lg.append('text').attr('x', 127).attr('y', 5).attr('font-size', 12.5).attr('fill', ink).text('External AI');
 
-    // useful-direction gradient band
-    var grad = svg.append('defs').append('linearGradient').attr('id', 'useful-grad').attr('x1', '0').attr('x2', '1');
-    grad.append('stop').attr('offset', '0').attr('stop-color', '#f0e4e0');
-    grad.append('stop').attr('offset', '1').attr('stop-color', '#e0eef3');
     var pTop = top, pBot = top + pairs.length * rowH;
-    svg.append('rect').attr('x', xs(1) - 8).attr('y', pTop).attr('width', xs(5) - xs(1) + 16).attr('height', pBot - pTop)
-      .attr('fill', 'url(#useful-grad)').attr('opacity', 0.55);
 
     // gridlines + 1..5 ticks
     for (var v = 1; v <= 5; v++) {
@@ -1048,10 +978,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     pairs.forEach(function (p, i) {
       var y = pTop + i * rowH + rowH / 2;
       var diff = p[0] - p[1];
-      svg.append('text').attr('x', 0).attr('y', y + 5).attr('font-size', 12).attr('fill', ink).text('P' + (i + 1));
-      svg.append('line').attr('x1', xs(p[0])).attr('x2', xs(p[1])).attr('y1', y).attr('y2', y).attr('stroke', '#aab3b8').attr('stroke-width', 2);
-      svg.append('circle').attr('cx', xs(p[0])).attr('cy', y).attr('r', 7.5).attr('fill', cX).attr('stroke', '#fff').attr('stroke-width', 1.6);
-      svg.append('circle').attr('cx', xs(p[1])).attr('cy', y).attr('r', 7.5).attr('fill', cE).attr('stroke', '#fff').attr('stroke-width', 1.6);
+      svg.append('text').attr('x', 0).attr('y', y + 5).attr('font-size', 12).attr('fill', ink).text('Pair ' + (i + 1));
+      svg.append('line').attr('x1', xs(p[0])).attr('x2', xs(p[1])).attr('y1', y).attr('y2', y).attr('stroke', '#7b8c92').attr('stroke-width', 4);
+      svg.append('circle').attr('cx', xs(p[0])).attr('cy', y - (diff === 0 ? 5 : 0)).attr('r', 8.5).attr('fill', cX).attr('stroke', '#fff').attr('stroke-width', 1.6);
+      svg.append('circle').attr('cx', xs(p[1])).attr('cy', y + (diff === 0 ? 5 : 0)).attr('r', 8.5).attr('fill', cE).attr('stroke', '#fff').attr('stroke-width', 1.6);
       var mid = (xs(p[0]) + xs(p[1])) / 2;
       svg.append('text').attr('x', mid).attr('y', y - 12).attr('text-anchor', 'middle').attr('font-size', 11)
         .attr('font-weight', 700).attr('fill', diff === 0 ? muted : (diff > 0 ? cX : cE)).text(diff > 0 ? '+' + diff : diff);
@@ -1062,75 +992,6 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   });
 
   /* ---- agreement distribution: violin plot (Slide 6 · new) ---- */
-  App.mount('s-06-agree', function (el) {
-    var css = getComputedStyle(document.documentElement);
-    var ink = css.getPropertyValue('--ink-strong').trim() || '#0d1a1e';
-    var muted = css.getPropertyValue('--muted').trim() || '#687780';
-    var accent = css.getPropertyValue('--accent').trim() || '#1683a5';
-
-    var items = [
-      ['Useful for ADS401 tasks', [2, 2, 3, 3, 3, 3, 4]],
-      ['Improves learning efficiency', [1, 2, 2, 2, 3, 3, 4]],
-      ['Easy to use', [2, 2, 3, 3, 3, 4, 4]],
-      ['Easy to learn', [1, 2, 2, 2, 3, 4, 5]],
-      ['Trust the answers', [2, 2, 3, 3, 3, 4, 5]],
-      ['Accurate answers', [2, 2, 3, 3, 3, 3, 4]]
-    ];
-    var W = 860, labelW = 250, plotLeft = labelW + 16, plotW = 520, rowH = 74, top = 30;
-    var H = top + items.length * rowH + 36;
-    var y = d3.scaleLinear().domain([0.5, 5.5]).range([plotLeft, plotLeft + plotW]);
-    var bw = 0.55;
-
-    function gauss(x) { return Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI); }
-    function kde(vals) {
-      return function (x) {
-        var s = 0;
-        vals.forEach(function (v) { s += gauss((x - v) / bw); });
-        return s / (vals.length * bw);
-      };
-    }
-
-    var svg = d3.select(el).append('svg')
-      .attr('viewBox', '0 0 ' + W + ' ' + H)
-      .attr('role', 'img')
-      .attr('aria-label', 'Agreement distribution: six statements as violins, seven ratings each');
-
-    for (var v = 1; v <= 5; v++) {
-      svg.append('line').attr('x1', y(v)).attr('x2', y(v)).attr('y1', top).attr('y2', top + items.length * rowH).attr('stroke', '#e4e9ea').attr('stroke-width', 1);
-      svg.append('text').attr('x', y(v)).attr('y', H - 10).attr('text-anchor', 'middle').attr('font-size', 13).attr('fill', muted).text(v);
-    }
-    svg.append('text').attr('x', y(1)).attr('y', 14).attr('font-size', 11.5).attr('fill', muted).text('← Strongly disagree');
-    svg.append('text').attr('x', y(5)).attr('y', 14).attr('font-size', 11.5).attr('text-anchor', 'end').attr('fill', muted).text('Strongly agree →');
-
-    items.forEach(function (it, i) {
-      var cy = top + i * rowH + rowH / 2;
-      var vals = it[1];
-      var dens = kde(vals);
-      var maxD = 0;
-      for (var x = 0.5; x <= 5.5; x += 0.05) maxD = Math.max(maxD, dens(x));
-      var amp = rowH * 0.42;
-
-      var pts = [];
-      for (var x2 = 0.5; x2 <= 5.5; x2 += 0.1) pts.push({ x: x2, d: dens(x2) });
-      var area = d3.area()
-        .x(function (d) { return y(d.x); })
-        .y0(function (d) { return cy - d.d * amp / maxD; })
-        .y1(function (d) { return cy + d.d * amp / maxD; })
-        .curve(d3.curveBasis);
-      svg.append('path').attr('d', area(pts)).attr('fill', accent).attr('opacity', 0.32);
-
-      var med = d3.median(vals);
-      svg.append('line').attr('x1', y(med)).attr('x2', y(med)).attr('y1', cy - amp).attr('y2', cy + amp).attr('stroke', ink).attr('stroke-width', 2);
-
-      vals.forEach(function (v2, j) {
-        svg.append('circle').attr('cx', y(v2)).attr('cy', cy + ((j % 2) ? 6 : -6)).attr('r', 4).attr('fill', accent).attr('stroke', '#fff').attr('stroke-width', 1);
-      });
-
-      svg.append('text').attr('x', 0).attr('y', cy + 5).attr('font-size', 13).attr('fill', ink).text(it[0]);
-      svg.append('text').attr('x', y(5) + 16).attr('y', cy + 4).attr('font-size', 11.5).attr('font-weight', 700).attr('fill', ink).text('Md ' + med);
-    });
-  });
-
   /* ---- interview coding: top codes (Slide 9) ---- */
   App.mount('s-08-codes', function (el) {
     var css = getComputedStyle(document.documentElement);
@@ -1169,5 +1030,30 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 })();
 </script>
 
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  slides.forEach(function (slide) {
+    var inner = document.createElement('div');
+    inner.className = 'print-slide-inner';
+    while (slide.firstChild) inner.appendChild(slide.firstChild);
+    slide.appendChild(inner);
+  });
+  function fitSlides() {
+    if (!window.matchMedia('print').matches) return;
+    slides.forEach(function (slide) {
+      var inner = slide.querySelector('.print-slide-inner');
+      inner.style.transform = ''; inner.style.width = '';
+      var css = getComputedStyle(slide);
+      var available = slide.clientHeight - parseFloat(css.paddingTop) - parseFloat(css.paddingBottom);
+      var needed = inner.scrollHeight;
+      if (needed > available) inner.style.transform = 'scale(' + Math.max(0.1, available / needed) + ')';
+    });
+  }
+  window.addEventListener('beforeprint', fitSlides);
+  var media = window.matchMedia('print');
+  if (media.addEventListener) media.addEventListener('change', function (event) { if (event.matches) fitSlides(); });
+})();
+</script>
 </body>
 </html>
