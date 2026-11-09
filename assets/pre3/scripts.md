@@ -1,67 +1,63 @@
-# ADS401 Presentation 3 — bilingual speaking script
+# ADS401 Presentation 3 — bilingual script
 
-对应 `site/src/pages/pre3/index.html`，共10页。只朗读英文；每段后的中文供理解和排练。建议约3分钟，具体时间取决于语速与翻页。问卷总体按27条提交记录描述；各分支及有效回答使用其实际分母。
+与 `site/src/pages/pre3/index.html` 的 10 页一一对应。只朗读英文；中文紧跟对应段落，供理解和排练。方括号是翻页与指图提示，不必朗读。英文约 340 词，以每分钟约 135–145 词并留出翻页停顿，预计约 3 分钟。
 
-## Slide 1 · Cover — 7秒
+## Slide 1 · Cover — 8 秒
 
-[Slide 1 / cue: title and Group A] Good morning. We are Group A. Today we present ADS401 students’ perspectives on XJTLU AI, using survey and interview evidence.
+[Slide 1 / cue: title] Good morning. We are Group A. Today, we’ll share what ADS401 students told us about using XJTLU AI for learning.
 
-[第1页／提示：标题与组员] 大家好，我们是A组。今天结合问卷和访谈证据，介绍ADS401学生对西浦AI的看法。
+[第 1 页／提示：标题] 大家好，我们是 A 组。今天我们将分享 ADS401 学生对使用西浦 AI 辅助学习的看法。
 
-## Slide 2 · Research focus — 20秒
+## Slide 2 · Research focus — 17 秒
 
-[Slide 2 / cue: research questions, then sample] We examine awareness and adoption, academic use, and perceived benefits and barriers. From 44 eligible students, we received 27 submissions. These are submission records, not necessarily 27 independent people. The charts summarise their backgrounds.
+[Slide 2 / cue: research questions, then 44 and 27] We studied awareness, use, and barriers to using XJTLU AI. Of 44 eligible students, we received 27 submissions. One ID appears twice, so these are records, not 27 confirmed individuals.
 
-[第2页／提示：研究问题，再看样本] 我们关注知晓与采纳、学术使用，以及感知收益和障碍。44名调查对象中收到27条提交；这是提交记录数，不一定代表27位独立参与者。图表概括这些记录的背景。
+[第 2 页／提示：研究问题，再指 44 和 27] 我们想了解学生是否知道西浦 AI、如何使用它，以及哪些因素促进或阻碍使用。44 名符合条件的学生中，我们收到 27 条提交。由于一个 ID 出现两次，这里统计的是记录，不能确认是 27 位不同的人。
 
-## Slide 3 · Study design — 20秒
+## Slide 3 · Study design — 17 秒
 
-[Slide 3 / cue: survey → groups → interviews] This is a non-experimental, cross-sectional survey followed by seven purposive interviews. In the past four weeks, seven records report both tools, fifteen external only, four neither, and one XJTLU only. These are observed groups, not experimental conditions.
+[Slide 3 / cue: survey → groups → interviews] We first surveyed students, then interviewed seven selected participants. In the previous four weeks, seven records reported using both, fifteen external only, four neither, and one XJTLU only. We observed these choices; we did not assign tools.
 
-[第3页／提示：问卷→分组→访谈] 这是先问卷后访谈的非实验横断面研究，共有7位目的性抽样的受访者。近四周的记录中，7条使用两类工具、15条仅使用外部、4条都不用、1条仅使用校内工具。这些是观察分组，不是实验条件。
+[第 3 页／提示：问卷 → 分组 → 访谈] 我们先开展问卷调查，再有目的地选择了 7 位学生进行访谈。在过去四周，7 条记录表示两类 AI 都用，15 条仅用外部 AI，4 条两类都不用，1 条仅用西浦 AI。这些是观察到的选择，我们没有指定学生使用哪种工具。
 
-## Slide 4 · Awareness and adoption — 18秒
+## Slide 4 · Awareness and adoption — 15 秒
 
-[Slide 4 / cue: awareness and recent use] Twenty-four of 27 submissions report awareness of XJTLU AI, while eight report recent use. Fifteen report ever using it; one submission did not answer that question. The figures are a snapshot, not a measured retention funnel.
+[Slide 4 / cue: awareness bar, then recent-use bar] Twenty-four of 27 submissions had heard of XJTLU AI, but only eight reported recent use. Fifteen reported ever using it; one did not answer. This is a snapshot, not a record of how use changed over time.
 
-[第4页／提示：知晓与近期使用] 27条提交中24条表示知道西浦AI，8条表示近期使用过。15条表示曾使用过，另有1条没有回答该题。这些是横断面快照，不是实际追踪得到的留存漏斗。
+[第 4 页／提示：知晓条形，再指近期使用] 先看知晓情况：27 条提交中有 24 条表示听说过西浦 AI，但只有 8 条报告近期使用过。15 条表示曾经使用过，另有 1 条没有回答这一问题。这只是某个时间点的快照，并非对使用变化的追踪。
 
-## Slide 5 · Usage patterns — 19秒
+## Slide 5 · Usage patterns — 16 秒
 
-[Slide 5 / cue: external in-course bar, then campus asterisk] Thirteen of 22 external-AI users report in-course use. All eight XJTLU-AI users selected campus resources, but that result needs a form audit. The groups overlap and have different denominators, so this is not an objective performance comparison.
+[Slide 5 / cue: external in-course bar, then campus-resources row] For learning activities, 13 of 22 external-AI users reported using it for course content. All eight XJTLU-AI users selected campus resources, although that result still needs a form check. The groups overlap and have different sizes, so these bars do not rank the tools.
 
-[第5页／提示：外部课程内条形，再指校内资源警示] 22条外部AI使用记录中，13条选择课程内学习。8条校内AI使用记录全部选择校内资源，但这一结果仍需核查表单。两组有重叠，分母也不同，因此不能视为客观性能比较。
+[第 5 页／提示：外部 AI 的课程内容条形，再指校内资源行] 在学习活动方面，22 条外部 AI 使用记录中有 13 条用于课程内容。8 条西浦 AI 使用记录都选择了校内资源，但这一结果仍需检查表单。两组有重叠，人数也不同，所以不能用这些条形直接给工具排名。
 
-## Slide 6 · Perceived experience — 19秒
+## Slide 6 · Perceived experience — 15 秒
 
-[Slide 6 / cue: one row of dots and the median] Each dot represents an answer from a recent XJTLU AI user. For questionnaire Q14, every item has seven valid ratings and one N/A; at least five ratings per item are neutral or negative. These small-sample descriptions do not validate TAM.
+[Slide 6 / cue: one row of dots] Among recent XJTLU AI users, each statement received seven ratings and one “not applicable.” On every statement, at least five ratings were neutral or below. That suggests limited positive feedback in this small group, not a verdict on the tool.
 
-[第6页／提示：一行评分点及中位数] 每个点代表一位近期西浦AI使用者的回答。问卷Q14的每项有7个有效评分和1个N/A；每项至少5个评分为中立或负向。这些小样本描述不能用于验证TAM。
+[第 6 页／提示：指一行评分点] 在近期使用西浦 AI 的记录中，每项陈述都有 7 个有效评分和 1 个“不适用”。每一项至少有 5 个评分是中立或更低。这说明这小组中的积极反馈有限，不能据此给工具下定论。
 
-## Slide 7 · Barriers and preference — 20秒
+## Slide 7 · Barriers and preference — 18 秒
 
-[Slide 7 / cue: left bars, then four categories on the right] Among 15 external-only records, nine prefer external AI and six are unclear about XJTLU AI’s capabilities. Among seven dual-use records, four prefer external AI, one prefers XJTLU, one says about the same, and one cannot compare. These are subjective preferences.
+[Slide 7 / cue: left bars, then right chart] Of the 15 external-only submissions, nine selected a preference for external tools and six were unclear about XJTLU AI’s capabilities. Among seven using both, four preferred external AI. These are reported preferences, not performance tests.
 
-[第7页／提示：左侧障碍，再看右侧四类偏好] 在15条仅外部使用记录中，9条偏好外部AI，6条不清楚校内AI的能力。在7条双工具记录中，4条偏好外部、1条偏好校内、1条认为相近、1条无法比较。这些是主观偏好。
+[第 7 页／提示：左侧条形，再指右图] 为什么一些学生继续使用外部 AI？在 15 条仅使用外部 AI 的提交中，9 条选择了更偏好外部工具，6 条表示不清楚西浦 AI 能做什么。在 7 条两类都用的记录中，4 条更偏好外部 AI。这些是自报偏好，不是性能测试。
 
-## Slide 8 · Matched comparison — 20秒
+## Slide 8 · Matched comparison — 16 秒
 
-[Slide 8 / cue: read the two ratings and comparison for Pair 3, then the tied pairs] Questionnaire Q12 and Q21 provide five paired ratings for campus resources. Two pairs favour XJTLU, two are tied, and one favours external AI; the median difference is zero. Five pairs cannot establish superiority or equivalence, and ratings are not objective quality tests.
+[Slide 8 / cue: read Pair 3, then point to the two ties] For finding campus resources, we compared paired ratings. In five matched pairs, two gave the same score, two rated XJTLU higher, and one rated external AI higher. Five pairs are too few to establish which tool is better or whether they are equivalent.
 
-[第8页／提示：读出第三行两项评分及比较结果，再指向平分的两对] 问卷Q12和Q21提供了五组配对评分，比较两类工具在校内资源任务中的有用性。两对校内更高、两对相同、一对外部更高，差值中位数为零。五对数据不能证明优越或等效，主观评分也不是客观质量测试。
+[第 8 页／提示：读出第 3 行，再指两组相同评分] 我们还可以比较同一项任务——查找校内资源——的评分。在 5 组配对中，2 组评分相同，2 组给西浦 AI 更高分，1 组给外部 AI 更高分。5 组数据不足以证明哪种工具更好，也不足以证明它们等效。
 
-## Slide 9 · Interviews and coding — 24秒
+## Slide 9 · Interviews and coding — 18 秒
 
-[Slide 9 / cue: code bars, then open one participant] Seven interviews were organised using 25 codes and seven interpretive theme groups. The chart counts coded interviews, not prevalence among students. Open a participant to see a short translated excerpt and linked code; historical trial does not establish recent dual use.
+[Slide 9 / cue: code chart, then open P001] Seven interviews added personal experiences. For example, one participant described receiving a completely wrong answer. We organised the interviews using 25 codes and seven themes; these are interpretations of a small, selected group, not findings for all students.
 
-[第9页／提示：编码条形图，再展开一位受访者] 七份访谈使用25个编码整理为七个解释性主题组。图表计数是被编码的访谈数，不能代表学生总体比例。展开受访者可查看英文翻译摘录及关联编码；历史试用不等于近期双工具使用。
+[第 9 页／提示：编码图，再展开 P001] 7 份访谈帮助我们理解个人体验。例如，一位受访者提到曾收到完全错误的回答。我们用 25 个编码和 7 个主题整理访谈；这些是对少量特定受访者经历的解释，不能代表所有学生。
 
-## Slide 10 · Q&A — 10秒
+## Slide 10 · Q&A — 5 秒
 
-[Slide 10 / cue: materials and AI usage] Thank you. Our project materials and AI-use disclosure are available here. We welcome your questions.
+[Slide 10 / cue: materials link] Thank you for listening. Our materials are linked here, and we welcome your questions.
 
-[第10页／提示：资料与AI使用说明] 谢谢。这里提供项目资料和AI使用说明，欢迎提问。
-
-## 临场时间不足
-
-优先省略第2页的三个研究问题枚举、第3页逐组人数或第9页交互演示；保留Q11表单待审、Q8缺失值和配对样本限制。
+[第 10 页／提示：资料链接] 谢谢大家。项目资料的链接在这里，欢迎提问。
