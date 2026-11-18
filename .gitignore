@@ -39,6 +39,7 @@ Thumbs.db
 .vscode/
 .idea/
 .claude/
+.omo/
 skills/
 
 # Interview sensitive data — never commit (ethics: local-only, in-group access)
