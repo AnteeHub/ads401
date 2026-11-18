@@ -25,8 +25,7 @@ behind those patterns.
   eligible invitees)
 - **Methods:** online survey (census-adjacent invitation) → purposive
   follow-up interviews
-- **Presentation deck:** PDF (LMS submission) — source:
-  [slides/slides.md](https://github.com/LionChenA/ads401/blob/main/slides/slides.md)
+- **Presentation deck:** PDF (LMS submission)
 
 ## 2. Problem, motivation and research questions
 
