@@ -116,9 +116,9 @@ title: Research Methodology
 
 <div class="col-h mt-6">Target Participants</div>
 <div class="stat-row mt-4">
-  <div class="stat"><span class="stat-n">48</span><span class="stat-l">enrolled</span></div>
+  <div class="stat"><span class="stat-n">50</span><span class="stat-l">enrolled</span></div>
   <div class="stat"><span class="stat-n">4</span><span class="stat-l">researchers excluded</span></div>
-  <div class="stat"><span class="stat-n">44</span><span class="stat-l">potentially eligible invitees</span></div>
+  <div class="stat"><span class="stat-n">46</span><span class="stat-l">potentially eligible invitees</span></div>
 </div>
 <p class="note-text mt-4">Voluntary survey participation. Achieved sample to be reported after collection.</p>
 
@@ -132,10 +132,10 @@ title: Research Methodology
 <!--
 Notes [22s] · 研究方法与对象 (对齐 scripts.md Research Methodology 节)
 【英文演讲词】:
-"To answer these questions, // we use an explanatory sequential mixed-methods design. // Our target population is all ADS401 students. // There are 48 students in the module; // after excluding four student researchers, // we have 44 potentially eligible invitees, // and participation is voluntary."
+"To answer these questions, // we use an explanatory sequential mixed-methods design. // Our target population is all ADS401 students. // There are 50 students in the module; // after excluding four student researchers, // we have 46 potentially eligible invitees, // and participation is voluntary."
 
 【中文要义】:
-为回答研究问题，我们采用解释性顺序混合方法设计。研究对象为 ADS401 全体学生：48 名在读，排除 4 名研究者后共 44 名潜在受邀者，参与遵循自愿原则。
+为回答研究问题，我们采用解释性顺序混合方法设计。研究对象为 ADS401 全体学生：50 名在读，排除 4 名研究者后共 46 名潜在受邀者，参与遵循自愿原则。
 -->
 
 ---
@@ -251,7 +251,7 @@ title: Follow-up Interviews & Integrated Analysis
     <div class="col-h">Semi-structured Interviews</div>
     <div class="kv mt-3">
       <div class="kv-row"><span class="kv-k">Sampling:</span> Purposive sampling of opt-in respondents, informed by initial survey analysis.</div>
-      <div class="kv-row"><span class="kv-k">Participants:</span> About 7 students; prioritise Both AI / Other AI Only.</div>
+      <div class="kv-row"><span class="kv-k">Participants:</span> About 4–6 students; prioritise Both AI / Other AI Only.</div>
       <div class="kv-row"><span class="kv-k">Duration:</span> 15–20 minutes per interview.</div>
       <div class="kv-row"><span class="kv-k">Focus:</span> Tool-choice motivations, adoption barriers, and learning experiences.</div>
     </div>
@@ -278,7 +278,7 @@ Notes [20s] · 追踪访谈与整合分析 (对齐 scripts.md Follow-up Intervie
 "After the survey, // we will conduct semi-structured follow-up interviews — // about four to six students, prioritising Both AI and Other AI Only groups. // Each interview lasts fifteen to twenty minutes, // focusing on tool-choice motivations, adoption barriers, and learning experiences. // We will code the interviews and identify recurring themes, // and connect these themes with survey patterns // to explain adoption decisions."
 
 【中文要义】:
-问卷之后开展半结构化追踪访谈：已访谈约 7 名学生，重点关注 Both AI 与 Other AI Only 两组，每人 15–20 分钟，聚焦工具选择动机、采纳障碍与学习体验。访谈编码归纳主题，并与问卷结果相互对照，解释采纳决策。
+问卷之后开展半结构化追踪访谈：约 4–6 名学生，重点关注 Both AI 与 Other AI Only 两组，每人 15–20 分钟，聚焦工具选择动机、采纳障碍与学习体验。访谈编码归纳主题，并与问卷结果相互对照，解释采纳决策。
 -->
 
 ---
