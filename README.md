@@ -17,10 +17,8 @@ here after collection (November 2026).
 
 | Path | What it is |
 |---|---|
-| `site/` | Astro project — the graded single-page web report (`src/content/report.md` = content, built & published by GitHub Actions on push to `main`) |
-| `slides/` | Slidev project — presentation deck source (`slides/slides.md`); the exported PDF is the LMS submission artifact, not committed |
+| `site/` | Astro project — the graded web report (`src/content/report.md` = Pre2 report, `src/pages/pre3/` = Pre3 data story; built & published by GitHub Actions on push to `main`) |
 | `assets/pre2/` | Research materials: `scripts.md` (facts single source of truth), survey instrument v1, reference list |
-| `.agents/skills/slides-style/` | Slide visual spec (seven-region layout, palette) — load before touching deck styling |
 | [`AGENTS.md`](AGENTS.md) | Operating rules (agents & contributors) |
 | [`DECISIONS.md`](DECISIONS.md) | Decision log with rationale (`R-x` entries) |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Setup, branch/PR flow, pre-PR checklist |
@@ -29,7 +27,6 @@ here after collection (November 2026).
 
 ```bash
 cd site && npm install && npm run dev     # web report preview
-cd slides && npm install && npm run dev   # deck preview
 ```
 
 Merging to `main` publishes the site automatically (no manual build step).
