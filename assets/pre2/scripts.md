@@ -35,8 +35,8 @@ Explanatory Sequential Mixed-Methods Design
 
 For Module ADS401:
 
-48 enrolled → 4 researchers excluded → 44 potentially eligible invitees → voluntary survey participation → achieved sample to be reported after collection. Cohort composition (per class roster): 43 PG1 mainland-China HCI students — including the 4 researchers — and 5 presumed non-mainland-China HCI students; the 44 invitees comprise 39 mainland and 5 non-mainland students.
-> 48 名在读学生 → 排除 4 名研究者 → 44 名潜在受邀学生 → 自愿参与问卷 → 收集结束后报告实际样本量。人群构成（按班级名册）：PG1 中国大陆 HCI 学生 43 人（含 4 名研究者），推测非中国大陆 HCI 学生 5 人；44 名受邀者中大陆 39 人、非大陆 5 人。
+50 enrolled → 4 researchers excluded → 46 potentially eligible invitees → voluntary survey participation → achieved sample to be reported after collection.
+> 50 名在读学生 → 排除 4 名研究者 → 46 名潜在受邀学生 → 自愿参与问卷 → 收集结束后报告实际样本量。
 
 
 
@@ -64,12 +64,10 @@ Usefulness and ease-of-use items are treated as exploratory, context-specific me
 > 描述性统计：分别报告认知、是否曾经使用及过去四周使用情况的人数与比例，注明各题有效回答人数。
 - Cross-tabulation: Compare usage patterns across four groups.
 > 交叉分析：比较四组学生的使用模式。
-- Rating Analysis: Summarise activity-specific usefulness, usefulness/ease-of-use/trust items, and future-use intentions descriptively; exclude N/A from rating summaries. Activity-category matrices cover categories A–E plus an Other row; Other-row responses are summarised separately (counts and ratings) and excluded from A–E paired comparisons.
-> 评分分析：描述各活动的有用性、有用性／易用性／信任条目及未来使用意愿；N/A 不计入评分汇总。活动矩阵覆盖 A–E 五类及“其他”行；“其他”行单独汇总（计数与评分），不计入 A–E 配对比较。
+- Rating Analysis: Summarise activity-specific usefulness, usefulness/ease-of-use/trust items, and future-use intentions descriptively; exclude N/A from rating summaries.
+> 评分分析：描述各活动的有用性、有用性／易用性／信任条目及未来使用意愿；N/A 不计入评分汇总。
 - Perceived Comparison: Examine paired activity ratings only where dual users rated both tools for the same category; report direct comparison responses separately, including 'Unable to compare'.
 > 感知比较：仅在双工具用户对同一活动类别均有有效评分时进行配对比较；直接比较题单独汇总，并报告“无法比较”。
-- Frequency & verification items: “Can't recall” responses on the usage-frequency items (Q10/Q18a) are reported separately and excluded from band percentages; verification frequency (Q12) uses quantified anchors (never to every time, scaled per 10 uses), with “Unable to judge” reported separately.
-> 频次与核实条目：使用频次题（Q10/Q18a）的“不记得了”单独报告，不计入档位百分比；核实频率（Q12）使用量化锚点（从不到每次，按每 10 次换算），“无法判断”单独报告。
 
 *References — Explanatory sequential design: Ivankova et al. (2006), [Using mixed-methods sequential explanatory design: From theory to practice](https://doi.org/10.1177/1525822X05282260); questionnaire design resource (survey instrument): Chung et al. (2024), [Student perspectives on AI in Higher Education: Student Survey](https://doi.org/10.26180/27915930); conceptual basis for usefulness and ease of use (not validation of the adapted questionnaire): Davis (1989), [Perceived usefulness, perceived ease of use, and user acceptance of information technology](https://doi.org/10.2307/249008).*
 
@@ -78,8 +76,8 @@ Usefulness and ease-of-use items are treated as exploratory, context-specific me
 ### Semi-structured Interviews
 - Sampling: Purposive sampling among survey respondents who opt into follow-up contact, informed by initial survey analysis.
 > 抽样方法：初步分析问卷后，在同意后续联系的受访者中进行目的性抽样。
-- Participants: 7 students interviewed (November 2026; transcriptions and analysis in progress), **prioritising students in 2 groups (Both AI / Other AI Only)**.
-> 参与者：已访谈 7 名（2026年11月；转录与分析进行中），重点关注使用两种 AI 和只使用其他 AI 分组的学生。
+- Participants: About 4–6 students, **prioritising students in 2 groups (Both AI / Other AI Only)**.
+> 参与者：约 4–6 名学生，重点关注使用两种 AI 和只使用其他 AI 分组的学生。
 - Duration: 15–20 minutes per interview.
 > 访谈时长：每人 15–20 分钟。
 - Focus: Tool-choice motivations, adoption barriers, and learning experiences.
@@ -103,11 +101,8 @@ Research Materials → Internal Questionnaire Check (4 researchers) → Survey D
 *References — Interview coding and theme development: Braun & Clarke (2006), [Using thematic analysis in psychology](https://doi.org/10.1191/1478088706qp063oa); connecting survey-based sampling, interview design, and interpretation: Fetters et al. (2013), [Achieving integration in mixed methods designs—Principles and practices](https://doi.org/10.1111/1475-6773.12117).*
 
 ## Materials
-Survey material: `questionnaire_v2.md` with English and Chinese variants under `assets/pre2/materials/survey/` (live 9-page, 27-question deployment instruments synced directly from Tally forms `xVXO6r` and `4a45br`); `questionnaire_v1.md` retained as the earlier draft.
-> 问卷材料：`assets/pre2/materials/survey/` 下的 `questionnaire_v2.md` 及中英文版（与线上 Tally 表单 `xVXO6r` 与 `4a45br` 实时同步的 9 页 27 题部署版本）；`questionnaire_v1.md` 留作早期草稿。
-
-Deployment status (November 2026): English primary survey live on Tally (https://tally.so/r/xVXO6r); Chinese mirror live on Tally (https://tally.so/r/4a45br). Data collection is actively in progress; findings will be reported after collection closes.
-> 部署状态（2026年11月）：官方英文主卷已上线 Tally (https://tally.so/r/xVXO6r)；中文镜像卷已上线 Tally (https://tally.so/r/4a45br)。问卷数据收集正在进行中，具体结果将在收集结束后汇报。
+Survey material: `questionnaire_v1.md` (pilot version) under `assets/pre2/materials/survey/`.
+> 问卷材料：`assets/pre2/materials/survey/` 下的 `questionnaire_v1.md`（试测版）。
 
 ### Limitations
 - Single-module sample
