@@ -1,5 +1,5 @@
 # Adapted from github/gitignore Node.gitignore for this repo:
-# root = Astro web report · slides/ = Slidev deck (source tracked, artifacts not)
+# site/ = Astro web report & data story (source tracked, artifacts not)
 
 # Dependencies
 node_modules/
@@ -8,15 +8,12 @@ node_modules/
 dist/
 .astro/
 .output/
-site/public/slides/
 
 # Exported artifacts (rebuilt from source; LMS submissions)
 *.pdf
 !assets/pre2/materials/survey/*.pdf
 !site/public/*.pdf
 *.pptx
-slides/supplementary.html
-slides/flow.svg
 
 # Local drafts and temporary files
 *.tmp
@@ -39,6 +36,7 @@ Thumbs.db
 .vscode/
 .idea/
 .claude/
+.omo/
 skills/
 
 # Interview sensitive data — never commit (ethics: local-only, in-group access)
