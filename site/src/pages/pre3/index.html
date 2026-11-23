@@ -49,6 +49,17 @@
   --fs-h2:  clamp(1.4rem, 2.6vw, 1.85rem);
   --fs-body: 1.06rem;
   --fs-small: 0.82rem;
+  --fs-lead: 1.16rem;
+  --fs-takeaway: 1.14rem;
+  --fs-section-label: 0.82rem;
+  --fs-note: 0.84rem;
+
+  /* Chart typography in SVG viewBox units: primary labels and values 17,
+     supporting labels 14, prominent scores 21. Charts are responsive; their
+     viewBox and spacing are designed together for the presentation layout. */
+  --chart-label: 17px;
+  --chart-secondary: 14px;
+  --chart-emphasis: 21px;
 
   --content-max: 1200px;
   --hairline: 1px solid var(--line);
@@ -163,11 +174,11 @@ kbd { display: inline-block; min-width: 1.45em; padding: 0 .35em; border: 1px so
   text-transform: uppercase; color: var(--accent-deep); margin: 0 0 .45rem; }
 .slide .section-title { margin: 0; font-size: var(--fs-h2); font-weight: 800; letter-spacing: -.01em;
   line-height: 1.2; color: var(--ink-strong); }
-.slide .lead { margin: .55rem 0 0; font-size: 1.16rem; color: var(--muted); max-width: 78ch; line-height: 1.55; }
+.slide .lead { margin: .55rem 0 0; font-size: var(--fs-lead); color: var(--muted); max-width: 78ch; line-height: 1.55; }
 .slide .hairline { border: none; border-top: var(--hairline); margin: 1rem 0 1.3rem; }
 .slide .slide-body { position: relative; flex: 1 0 auto; }
 .slide .takeaway { margin: 1.4rem 0 0; padding-top: .95rem; border-top: var(--hairline);
-  font-size: 1.14rem; font-weight: 700; color: var(--accent-deep); line-height: 1.4; }
+  font-size: var(--fs-takeaway); font-weight: 700; color: var(--accent-deep); line-height: 1.4; }
 .slide .takeaway::before { content: "Takeaway — "; font-weight: 600; color: var(--muted); }
 
 
@@ -234,17 +245,22 @@ svg a .trace-ref { cursor:pointer; }
 .sample .note { margin-top: .2rem; font-size: .8rem; color: var(--muted); }
 
 .block { margin-top: 1.7rem; padding-top: 1.25rem; border-top: var(--hairline); }
-.block-head { margin: 0 0 .85rem; font-size: .82rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--accent-deep); }
+.block-head { margin: 0 0 .85rem; font-size: var(--fs-section-label); font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--accent-deep); }
 .contributions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; margin: 0; }
 .contributions div { background: var(--accent-soft); padding: .7rem .9rem; border-radius: 4px; }
 .contributions dt { font-weight: 700; color: var(--ink-strong); }
 .contributions dd { margin: .15rem 0 0; color: var(--muted); font-size: .9rem; }
 
 .viz { position: relative; width: 100%; }
-.viz svg { display: block; width: 100%; height: auto; }
-.viz .demo-title { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; fill: var(--accent-deep); }
-.viz .demo-label { font-size: 12px; fill: var(--ink); }
-.viz .demo-val { font-size: 12px; fill: var(--muted); }
+.viz svg { display: block; width: 100%; height: auto; font-family: var(--font); }
+/* Compact charts keep their intended type size when a two-column layout stacks. */
+[data-viz="s-02-groups"] svg { max-width: 410px; }
+[data-viz="s-06-barriers"] svg { max-width: 460px; }
+[data-viz="s-06-pref"] svg { max-width: 420px; }
+[data-viz="s-08-codes"] svg { max-width: 480px; }
+.viz .demo-title { font-size: var(--chart-label); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; fill: var(--accent-deep); }
+.viz .demo-label { font-size: var(--chart-label); fill: var(--ink); }
+.viz .demo-val { font-size: var(--chart-label); fill: var(--muted); }
 
 .placeholder-note { padding: 3rem 1rem; text-align: center; color: var(--muted);
   border: 1px dashed var(--line); border-radius: var(--radius); font-size: .9rem; }
@@ -305,8 +321,8 @@ svg a .trace-ref { cursor:pointer; }
 .reflect li b { color: var(--accent-deep); }
 
 /* ---------- chart footnote + legend ---------- */
-.footnote { margin: .7rem 0 0; font-size: .84rem; color: var(--muted); line-height: 1.55; }
-.legend { display: flex; flex-wrap: wrap; gap: 1.2rem; margin: .3rem 0 .4rem; font-size: .84rem; color: var(--muted); }
+.footnote { margin: .7rem 0 0; font-size: var(--fs-note); color: var(--muted); line-height: 1.55; }
+.legend { display: flex; flex-wrap: wrap; gap: 1.2rem; margin: .3rem 0 .4rem; font-size: var(--fs-note); color: var(--muted); }
 .legend .li { display: inline-flex; align-items: center; gap: .4rem; }
 .legend .sw { width: .72rem; height: .72rem; border-radius: 2px; display: inline-block; }
 
@@ -382,6 +398,10 @@ svg a .trace-ref { cursor:pointer; }
   .slide + .slide { break-before: page !important; page-break-before: always !important; }
   .viz, .joint, .two-col, .three-col, .pipeline, .reflect { break-inside: avoid !important; page-break-inside: avoid !important; }
   .viz svg { width: 100% !important; max-width: 100% !important; }
+  [data-viz="s-02-groups"] svg { max-width: 410px !important; }
+  [data-viz="s-06-barriers"] svg { max-width: 460px !important; }
+  [data-viz="s-06-pref"] svg { max-width: 420px !important; }
+  [data-viz="s-08-codes"] svg { max-width: 480px !important; }
 }
 </style>
 </head>
@@ -558,7 +578,7 @@ svg a .trace-ref { cursor:pointer; }
 <span class="kicker">RQ3 · Perceived Experience</span>
 <h2 class="section-title">At least 5 of 7 ratings are neutral or negative on every item</h2>
 <p class="lead">Eight recent XJTLU AI users (G1 + G4) answered; each statement has seven ratings and one N/A.</p>
-<hr class="hairline"><div class="slide-body"><div class="viz" data-viz="s-05-observed"><svg viewBox="0 0 1080 390" role="img" aria-labelledby="perception-title perception-desc"><g aria-hidden="true"><rect x="0" y="51" width="1080" height="53" fill="#f4f7f7"/><rect x="0" y="157" width="1080" height="53" fill="#f4f7f7"/><rect x="0" y="263" width="1080" height="53" fill="#f4f7f7"/></g><title id="perception-title">Six perception items: seven observed ratings and one N/A each</title><desc id="perception-desc">One dot per valid answer, stacked vertically at its integer rating. Medians are 3, 2, 3, 2, 3, 3. At least five of seven ratings per item are at or below neutral.</desc><line x1="555" x2="555" y1="49" y2="368" stroke="#e4e9ea"/><text x="555" y="20" text-anchor="middle" font-size="14" fill="#172327">1</text><line x1="635" x2="635" y1="49" y2="368" stroke="#e4e9ea"/><text x="635" y="20" text-anchor="middle" font-size="14" fill="#172327">2</text><line x1="715" x2="715" y1="49" y2="368" stroke="#e4e9ea"/><text x="715" y="20" text-anchor="middle" font-size="14" fill="#172327">3</text><line x1="795" x2="795" y1="49" y2="368" stroke="#e4e9ea"/><text x="795" y="20" text-anchor="middle" font-size="14" fill="#172327">4</text><line x1="875" x2="875" y1="49" y2="368" stroke="#e4e9ea"/><text x="875" y="20" text-anchor="middle" font-size="14" fill="#172327">5</text><text x="530" y="40" font-size="12" fill="#687780">Disagree</text><text x="715" y="40" text-anchor="middle" font-size="12" fill="#687780">Neutral</text><text x="900" y="40" text-anchor="end" font-size="12" fill="#687780">Agree</text><text x="955" y="25" text-anchor="middle" font-size="13" fill="#687780">Median</text><text x="1035" y="25" text-anchor="middle" font-size="13" fill="#687780">N/A</text><text x="0" y="72" font-size="17" fill="#172327">Helps complete ADS401 tasks</text><text x="0" y="90" font-size="17" fill="#172327">more effectively</text><circle cx="635" cy="71.5" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more effectively: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="82.5" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more effectively: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="60.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="71.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="82.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="93.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="795" cy="77.0" r="4.5" fill="#7fb8cc"><title>Helps complete ADS401 tasks more effectively: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="82" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">3</text><text x="1035" y="82" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="125" font-size="17" fill="#172327">Helps complete ADS401 tasks</text><text x="0" y="143" font-size="17" fill="#172327">more efficiently</text><circle cx="555" cy="130.0" r="4.5" fill="#b3403a"><title>Helps complete ADS401 tasks more efficiently: rating 1, 1/7 responses at this rating</title></circle><circle cx="635" cy="119.0" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="130.0" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="141.0" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="715" cy="124.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more efficiently: rating 3, 2/7 responses at this rating</title></circle><circle cx="715" cy="135.5" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more efficiently: rating 3, 2/7 responses at this rating</title></circle><circle cx="795" cy="130.0" r="4.5" fill="#7fb8cc"><title>Helps complete ADS401 tasks more efficiently: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="135" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">2</text><text x="1035" y="135" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="188" font-size="17" fill="#172327">Easy to learn how to use</text><circle cx="635" cy="177.5" r="4.5" fill="#d98c86"><title>Easy to learn how to use: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="188.5" r="4.5" fill="#d98c86"><title>Easy to learn how to use: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="172.0" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="183.0" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="194.0" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="795" cy="177.5" r="4.5" fill="#7fb8cc"><title>Easy to learn how to use: rating 4, 2/7 responses at this rating</title></circle><circle cx="795" cy="188.5" r="4.5" fill="#7fb8cc"><title>Easy to learn how to use: rating 4, 2/7 responses at this rating</title></circle><text x="955" y="188" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">3</text><text x="1035" y="188" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="241" font-size="17" fill="#172327">Easy to use for my ADS401 tasks</text><circle cx="555" cy="236.0" r="4.5" fill="#b3403a"><title>Easy to use for my ADS401 tasks: rating 1, 1/7 responses at this rating</title></circle><circle cx="635" cy="225.0" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="236.0" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="247.0" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="715" cy="236.0" r="4.5" fill="#aca2a9"><title>Easy to use for my ADS401 tasks: rating 3, 1/7 responses at this rating</title></circle><circle cx="795" cy="236.0" r="4.5" fill="#7fb8cc"><title>Easy to use for my ADS401 tasks: rating 4, 1/7 responses at this rating</title></circle><circle cx="875" cy="236.0" r="4.5" fill="#1683a5"><title>Easy to use for my ADS401 tasks: rating 5, 1/7 responses at this rating</title></circle><text x="955" y="241" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">2</text><text x="1035" y="241" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="284" font-size="17" fill="#172327">Usually provides information</text><text x="0" y="302" font-size="17" fill="#172327">I consider reliable</text><circle cx="635" cy="283.5" r="4.5" fill="#d98c86"><title>Usually provides information I consider reliable: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="294.5" r="4.5" fill="#d98c86"><title>Usually provides information I consider reliable: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="278.0" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="289.0" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="300.0" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="795" cy="289.0" r="4.5" fill="#7fb8cc"><title>Usually provides information I consider reliable: rating 4, 1/7 responses at this rating</title></circle><circle cx="875" cy="289.0" r="4.5" fill="#1683a5"><title>Usually provides information I consider reliable: rating 5, 1/7 responses at this rating</title></circle><text x="955" y="294" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">3</text><text x="1035" y="294" text-anchor="middle" font-size="16" fill="#687780">1</text><text x="0" y="347" font-size="17" fill="#172327">I generally trust XJTLU AI’s explanations</text><circle cx="635" cy="336.5" r="4.5" fill="#d98c86"><title>I generally trust XJTLU AI’s explanations: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="347.5" r="4.5" fill="#d98c86"><title>I generally trust XJTLU AI’s explanations: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="325.5" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="336.5" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="347.5" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="358.5" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="795" cy="342.0" r="4.5" fill="#7fb8cc"><title>I generally trust XJTLU AI’s explanations: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="347" text-anchor="middle" font-size="17" font-weight="700" fill="#1683a5">3</text><text x="1035" y="347" text-anchor="middle" font-size="16" fill="#687780">1</text></svg></div>
+<hr class="hairline"><div class="slide-body"><div class="viz" data-viz="s-05-observed"><svg viewBox="0 0 1080 456" role="img" aria-labelledby="perception-title perception-desc"><g aria-hidden="true"><rect x="0" y="51" width="1080" height="64" fill="#f4f7f7"/><rect x="0" y="179" width="1080" height="64" fill="#f4f7f7"/><rect x="0" y="307" width="1080" height="64" fill="#f4f7f7"/></g><title id="perception-title">Six perception items: seven observed ratings and one N/A each</title><desc id="perception-desc">One dot per valid answer, stacked vertically at its integer rating. Medians are 3, 2, 3, 2, 3, 3. At least five of seven ratings per item are at or below neutral.</desc><line x1="555" x2="555" y1="49" y2="434" stroke="#e4e9ea"/><text x="555" y="20" text-anchor="middle" font-size="var(--chart-secondary)" fill="#172327">1</text><line x1="635" x2="635" y1="49" y2="434" stroke="#e4e9ea"/><text x="635" y="20" text-anchor="middle" font-size="var(--chart-secondary)" fill="#172327">2</text><line x1="715" x2="715" y1="49" y2="434" stroke="#e4e9ea"/><text x="715" y="20" text-anchor="middle" font-size="var(--chart-secondary)" fill="#172327">3</text><line x1="795" x2="795" y1="49" y2="434" stroke="#e4e9ea"/><text x="795" y="20" text-anchor="middle" font-size="var(--chart-secondary)" fill="#172327">4</text><line x1="875" x2="875" y1="49" y2="434" stroke="#e4e9ea"/><text x="875" y="20" text-anchor="middle" font-size="var(--chart-secondary)" fill="#172327">5</text><text x="530" y="40" font-size="var(--chart-secondary)" fill="#687780">Disagree</text><text x="715" y="40" text-anchor="middle" font-size="var(--chart-secondary)" fill="#687780">Neutral</text><text x="900" y="40" text-anchor="end" font-size="var(--chart-secondary)" fill="#687780">Agree</text><text x="955" y="25" text-anchor="middle" font-size="var(--chart-secondary)" fill="#687780">Median</text><text x="1035" y="25" text-anchor="middle" font-size="var(--chart-secondary)" fill="#687780">N/A</text><text x="0" y="86.5" font-size="var(--chart-emphasis)" fill="#172327">Helps complete ADS401 tasks more effectively</text><circle cx="635" cy="77" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more effectively: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="88" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more effectively: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="66" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="77" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="88" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="99" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more effectively: rating 3, 4/7 responses at this rating</title></circle><circle cx="795" cy="82.5" r="4.5" fill="#7fb8cc"><title>Helps complete ADS401 tasks more effectively: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="87.5" text-anchor="middle" font-size="var(--chart-emphasis)" font-weight="700" fill="#1683a5">3</text><text x="1035" y="87.5" text-anchor="middle" font-size="var(--chart-label)" fill="#687780">1</text><text x="0" y="150.5" font-size="var(--chart-emphasis)" fill="#172327">Helps complete ADS401 tasks more efficiently</text><circle cx="555" cy="146.5" r="4.5" fill="#b3403a"><title>Helps complete ADS401 tasks more efficiently: rating 1, 1/7 responses at this rating</title></circle><circle cx="635" cy="135.5" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="146.5" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="157.5" r="4.5" fill="#d98c86"><title>Helps complete ADS401 tasks more efficiently: rating 2, 3/7 responses at this rating</title></circle><circle cx="715" cy="141" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more efficiently: rating 3, 2/7 responses at this rating</title></circle><circle cx="715" cy="152" r="4.5" fill="#aca2a9"><title>Helps complete ADS401 tasks more efficiently: rating 3, 2/7 responses at this rating</title></circle><circle cx="795" cy="146.5" r="4.5" fill="#7fb8cc"><title>Helps complete ADS401 tasks more efficiently: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="151.5" text-anchor="middle" font-size="var(--chart-emphasis)" font-weight="700" fill="#1683a5">2</text><text x="1035" y="151.5" text-anchor="middle" font-size="var(--chart-label)" fill="#687780">1</text><text x="0" y="215.5" font-size="var(--chart-emphasis)" fill="#172327">Easy to learn how to use</text><circle cx="635" cy="205" r="4.5" fill="#d98c86"><title>Easy to learn how to use: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="216" r="4.5" fill="#d98c86"><title>Easy to learn how to use: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="199.5" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="210.5" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="221.5" r="4.5" fill="#aca2a9"><title>Easy to learn how to use: rating 3, 3/7 responses at this rating</title></circle><circle cx="795" cy="205" r="4.5" fill="#7fb8cc"><title>Easy to learn how to use: rating 4, 2/7 responses at this rating</title></circle><circle cx="795" cy="216" r="4.5" fill="#7fb8cc"><title>Easy to learn how to use: rating 4, 2/7 responses at this rating</title></circle><text x="955" y="215.5" text-anchor="middle" font-size="var(--chart-emphasis)" font-weight="700" fill="#1683a5">3</text><text x="1035" y="215.5" text-anchor="middle" font-size="var(--chart-label)" fill="#687780">1</text><text x="0" y="279.5" font-size="var(--chart-emphasis)" fill="#172327">Easy to use for my ADS401 tasks</text><circle cx="555" cy="274.5" r="4.5" fill="#b3403a"><title>Easy to use for my ADS401 tasks: rating 1, 1/7 responses at this rating</title></circle><circle cx="635" cy="263.5" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="274.5" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="635" cy="285.5" r="4.5" fill="#d98c86"><title>Easy to use for my ADS401 tasks: rating 2, 3/7 responses at this rating</title></circle><circle cx="715" cy="274.5" r="4.5" fill="#aca2a9"><title>Easy to use for my ADS401 tasks: rating 3, 1/7 responses at this rating</title></circle><circle cx="795" cy="274.5" r="4.5" fill="#7fb8cc"><title>Easy to use for my ADS401 tasks: rating 4, 1/7 responses at this rating</title></circle><circle cx="875" cy="274.5" r="4.5" fill="#1683a5"><title>Easy to use for my ADS401 tasks: rating 5, 1/7 responses at this rating</title></circle><text x="955" y="279.5" text-anchor="middle" font-size="var(--chart-emphasis)" font-weight="700" fill="#1683a5">2</text><text x="1035" y="279.5" text-anchor="middle" font-size="var(--chart-label)" fill="#687780">1</text><text x="0" y="342.5" font-size="var(--chart-emphasis)" fill="#172327">Usually provides information I consider reliable</text><circle cx="635" cy="333" r="4.5" fill="#d98c86"><title>Usually provides information I consider reliable: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="344" r="4.5" fill="#d98c86"><title>Usually provides information I consider reliable: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="327.5" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="338.5" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="715" cy="349.5" r="4.5" fill="#aca2a9"><title>Usually provides information I consider reliable: rating 3, 3/7 responses at this rating</title></circle><circle cx="795" cy="338.5" r="4.5" fill="#7fb8cc"><title>Usually provides information I consider reliable: rating 4, 1/7 responses at this rating</title></circle><circle cx="875" cy="338.5" r="4.5" fill="#1683a5"><title>Usually provides information I consider reliable: rating 5, 1/7 responses at this rating</title></circle><text x="955" y="343.5" text-anchor="middle" font-size="var(--chart-emphasis)" font-weight="700" fill="#1683a5">3</text><text x="1035" y="343.5" text-anchor="middle" font-size="var(--chart-label)" fill="#687780">1</text><text x="0" y="407.5" font-size="var(--chart-emphasis)" fill="#172327">I generally trust XJTLU AI’s explanations</text><circle cx="635" cy="397" r="4.5" fill="#d98c86"><title>I generally trust XJTLU AI’s explanations: rating 2, 2/7 responses at this rating</title></circle><circle cx="635" cy="408" r="4.5" fill="#d98c86"><title>I generally trust XJTLU AI’s explanations: rating 2, 2/7 responses at this rating</title></circle><circle cx="715" cy="386" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="397" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="408" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="715" cy="419" r="4.5" fill="#aca2a9"><title>I generally trust XJTLU AI’s explanations: rating 3, 4/7 responses at this rating</title></circle><circle cx="795" cy="402.5" r="4.5" fill="#7fb8cc"><title>I generally trust XJTLU AI’s explanations: rating 4, 1/7 responses at this rating</title></circle><text x="955" y="407.5" text-anchor="middle" font-size="var(--chart-emphasis)" font-weight="700" fill="#1683a5">3</text><text x="1035" y="407.5" text-anchor="middle" font-size="var(--chart-label)" fill="#687780">1</text></svg></div>
 <p class="footnote">Each dot is one answer. 1 means strongly disagree; 3 is neutral; 5 means strongly agree. Median is the middle rating; N/A means no rating. <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#14-based-on-your-overall-experience-using-xjtlu-ai-in-ads401-how-much-do-you-agree-with-these-statements-select-na-if-you-cannot-judge" target="_blank" rel="noopener noreferrer">Q14</a>.</p>
 </div><p class="takeaway">Efficiency and ease of use for ADS401 tasks have median 2; the other items have median 3. Small-sample descriptions, not TAM validation.</p></section>
 
@@ -594,9 +614,9 @@ svg a .trace-ref { cursor:pointer; }
         <hr class="hairline">
         <div class="slide-body">
           <div class="viz" data-viz="s-07-paired"></div>
-          <p class="footnote">Each highlighted circle marks the selected score on the 1–5 scale. The last column shows which rating is higher and by how many points. <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#12-for-each-activity-category-rate-how-useful-xjtlu-ai-was-in-your-actual-experience-select-na-for-categories-you-did-not-use-it-for">Q12</a> · <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#21-for-each-activity-category-rate-how-useful-external-ai-was-in-your-actual-experience-select-na-for-categories-you-did-not-use-it-for">Q21</a></p>
+          <p class="footnote">Filled circles show ratings (1–5). Difference = XJTLU AI − External AI; positive means XJTLU AI rated higher. <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#12-for-each-activity-category-rate-how-useful-xjtlu-ai-was-in-your-actual-experience-select-na-for-categories-you-did-not-use-it-for">Q12</a> · <a class="q-link" href="https://github.com/LionChenA/ads401/blob/main/assets/pre2/materials/survey/questionnaire_v2_en.md#21-for-each-activity-category-rate-how-useful-external-ai-was-in-your-actual-experience-select-na-for-categories-you-did-not-use-it-for">Q21</a></p>
         </div>
-        <p class="takeaway">Two pairs are tied, two rate XJTLU higher, and one rates external AI higher. Five pairs cannot establish overall superiority or equivalence.</p>
+        <p class="takeaway">Two pairs are tied, two rate XJTLU AI higher, and one rates External AI higher. Five pairs cannot establish overall superiority or equivalence.</p>
       </section>
 
       <!-- ─────────────── SLIDE 9 · Interviews: coding & themes ─────────────── -->
@@ -817,8 +837,8 @@ svg a .trace-ref { cursor:pointer; }
       { dim: 'AI experience', items: [['>3 years', 10], ['1–2 years', 6], ['<1 year', 5], ['2–3 years', 5], ['None', 1]] }
     ];
 
-    var colW = 465, gapX = 30, gapY = 30, titleH = 22, barH = 26;
-    var labelW = 165, barMax = colW - labelW - 95;
+    var colW = 465, gapX = 30, gapY = 32, titleH = 26, barH = 32;
+    var labelW = 205, barMax = colW - labelW - 95;
 
     panels.forEach(function (p) { p.h = titleH + p.items.length * barH; });
     var row0H = Math.max(panels[0].h, panels[1].h);
@@ -864,7 +884,7 @@ svg a .trace-ref { cursor:pointer; }
       ['G4 · XJTLU only', 'XJTLU AI only', 1]
     ];
     var nTotal = 27;
-    var W = 460, labelW = 150, barMax = 160, barH = 42, titleH = 6;
+    var W = 410, labelW = 195, barMax = 160, barH = 52, titleH = 8;
     var H = titleH + groups.length * barH;
 
     var svg = d3.select(el).append('svg')
@@ -875,10 +895,10 @@ svg a .trace-ref { cursor:pointer; }
     groups.forEach(function (g, i) {
       var y = titleH + i * barH;
       var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
-      r.append('text').attr('x', 0).attr('y', 18).attr('font-size', 13).attr('font-weight', 800).attr('fill', ink).text(g[0]);
-      r.append('text').attr('x', 0).attr('y', 34).attr('font-size', 11).attr('fill', muted).text(g[1]);
-      r.append('rect').attr('x', labelW).attr('y', 16).attr('width', (g[2] / nTotal) * barMax).attr('height', 12).attr('fill', gcolors[i]);
-      r.append('text').attr('x', labelW + (g[2] / nTotal) * barMax + 8).attr('y', 27).attr('font-size', 12).attr('fill', muted).text(g[2] + ' (' + (100 * g[2] / nTotal).toFixed(1) + '%)');
+      r.append('text').attr('x', 0).attr('y', 21).attr('font-size', 'var(--chart-label)').attr('font-weight', 800).attr('fill', ink).text(g[0]);
+      r.append('text').attr('x', 0).attr('y', 39).attr('font-size', 'var(--chart-secondary)').attr('fill', muted).text(g[1]);
+      r.append('rect').attr('x', labelW).attr('y', 18).attr('width', (g[2] / nTotal) * barMax).attr('height', 15).attr('fill', gcolors[i]);
+      r.append('text').attr('x', labelW + (g[2] / nTotal) * barMax + 8).attr('y', 30).attr('font-size', 'var(--chart-secondary)').attr('fill', muted).text(g[2] + ' (' + (100 * g[2] / nTotal).toFixed(1) + '%)');
     });
   });
 
@@ -895,7 +915,7 @@ svg a .trace-ref { cursor:pointer; }
       ['Recent use (past 4 wks)', 8, 'Q9 · Both + XJTLU only'],
       ['Frequent use (5+ times)', 2, 'Q10 · 5+ times']
     ];
-    var nTotal = 27, W = 920, labelW = 250, barMax = 430, barH = 58;
+    var nTotal = 27, W = 920, labelW = 290, barMax = 430, barH = 68;
     var H = stages.length * barH;
 
     var svg = d3.select(el).append('svg')
@@ -906,11 +926,11 @@ svg a .trace-ref { cursor:pointer; }
     stages.forEach(function (s, i) {
       var y = i * barH;
       var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
-      r.append('text').attr('x', 0).attr('y', 23).attr('font-size', 14).attr('font-weight', 800).attr('fill', ink).text(s[0]);
-      r.append('text').attr('x', 0).attr('y', 41).attr('font-size', 11).attr('fill', muted).text(s[2]);
+      r.append('text').attr('x', 0).attr('y', 23).attr('font-size', 'var(--chart-label)').attr('font-weight', 800).attr('fill', ink).text(s[0]);
+      r.append('text').attr('x', 0).attr('y', 46).attr('font-size', 'var(--chart-secondary)').attr('fill', muted).text(s[2]);
       var w = (s[1] / nTotal) * barMax;
       r.append('rect').attr('x', labelW).attr('y', 13).attr('width', w).attr('height', 21).attr('fill', accent).attr('opacity', 0.5 + 0.5 * (1 - i / 3));
-      r.append('text').attr('x', labelW + w + 10).attr('y', 29).attr('font-size', 14).attr('font-weight', 800).attr('fill', ink).text(s[1] + ' (' + (100 * s[1] / nTotal).toFixed(1) + '%)');
+      r.append('text').attr('x', labelW + w + 10).attr('y', 29).attr('font-size', 'var(--chart-label)').attr('font-weight', 800).attr('fill', ink).text(s[1] + ' (' + (100 * s[1] / nTotal).toFixed(1) + '%)');
     });
   });
 
@@ -927,8 +947,8 @@ svg a .trace-ref { cursor:pointer; }
     var ext = [10, 13, 8, 8, 5], nE = 22;
     var mode = 'count';
 
-    var W = 920, H = 460, centerX = 460, halfLabel = 130, barLen = 290;
-    var plotTop = 56, rowH = 74, barH = 26;
+    var W = 920, H = 425, centerX = 460, halfLabel = 130, barLen = 290;
+    var plotTop = 56, rowH = 68, barH = 26;
 
     el.innerHTML = '';
     var head = el.appendChild(document.createElement('div'));
@@ -957,25 +977,25 @@ svg a .trace-ref { cursor:pointer; }
         [lx, rx].forEach(function (x) {
           svg.append('line').attr('x1', x).attr('x2', x).attr('y1', plotTop - 6).attr('y2', bot).attr('stroke', '#e7ebec').attr('stroke-width', 1);
         });
-        svg.append('text').attr('x', lx).attr('y', plotTop - 26).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', muted).text(t + (mode === 'pct' ? '%' : ''));
-        svg.append('text').attr('x', rx).attr('y', plotTop - 26).attr('text-anchor', 'middle').attr('font-size', 10.5).attr('fill', muted).text(t + (mode === 'pct' ? '%' : ''));
+        svg.append('text').attr('x', lx).attr('y', plotTop - 26).attr('text-anchor', 'middle').attr('font-size', 'var(--chart-secondary)').attr('fill', muted).text(t + (mode === 'pct' ? '%' : ''));
+        svg.append('text').attr('x', rx).attr('y', plotTop - 26).attr('text-anchor', 'middle').attr('font-size', 'var(--chart-secondary)').attr('fill', muted).text(t + (mode === 'pct' ? '%' : ''));
       });
 
       cats.forEach(function (c, i) {
         var y = plotTop + i * rowH;
         var vx = value(xjtu[i], nX), ve = value(ext[i], nE);
         var wx = Math.max(2, (vx / maxV()) * barLen), we = Math.max(2, (ve / maxV()) * barLen);
-        svg.append('text').attr('x', centerX).attr('y', y + barH / 2 + 5).attr('text-anchor', 'middle').attr('font-size', 12.5).attr('fill', ink).text(c);
+        svg.append('text').attr('x', centerX).attr('y', y + barH / 2 + 5).attr('text-anchor', 'middle').attr('font-size', 'var(--chart-label)').attr('fill', ink).text(c);
         svg.append('rect').attr('x', centerX - halfLabel - wx).attr('y', y).attr('width', wx).attr('height', barH).attr('fill', cX).attr('rx', 5)
           .on('mouseenter', function (ev) { showTip('<b style="color:' + cX + '">XJTLU AI</b><br>' + c + '<br>' + xjtu[i] + ' / ' + nX + ' (' + (100 * xjtu[i] / nX).toFixed(1) + '%)', ev); })
           .on('mousemove', function (ev) { var t = document.getElementById('tooltip'); t.style.left = Math.min(window.innerWidth - 320, Math.max(12, ev.clientX + 16)) + 'px'; t.style.top = Math.min(window.innerHeight - 120, Math.max(12, ev.clientY + 16)) + 'px'; })
           .on('mouseleave', function () { hideTip(); });
-        svg.append('text').attr('x', centerX - halfLabel - wx - 8).attr('y', y + barH / 2 + 5).attr('text-anchor', 'end').attr('font-size', 12).attr('font-weight', 700).attr('fill', ink).text(fmt(vx));
+        svg.append('text').attr('x', centerX - halfLabel - wx - 8).attr('y', y + barH / 2 + 5).attr('text-anchor', 'end').attr('font-size', 'var(--chart-secondary)').attr('font-weight', 700).attr('fill', ink).text(fmt(vx));
         svg.append('rect').attr('x', centerX + halfLabel).attr('y', y).attr('width', we).attr('height', barH).attr('fill', cE).attr('rx', 5)
           .on('mouseenter', function (ev) { showTip('<b style="color:' + cE + '">External AI</b><br>' + c + '<br>' + ext[i] + ' / ' + nE + ' (' + (100 * ext[i] / nE).toFixed(1) + '%)', ev); })
           .on('mousemove', function (ev) { var t = document.getElementById('tooltip'); t.style.left = Math.min(window.innerWidth - 320, Math.max(12, ev.clientX + 16)) + 'px'; t.style.top = Math.min(window.innerHeight - 120, Math.max(12, ev.clientY + 16)) + 'px'; })
           .on('mouseleave', function () { hideTip(); });
-        svg.append('text').attr('x', centerX + halfLabel + we + 8).attr('y', y + barH / 2 + 5).attr('font-size', 12).attr('font-weight', 700).attr('fill', ink).text(fmt(ve));
+        svg.append('text').attr('x', centerX + halfLabel + we + 8).attr('y', y + barH / 2 + 5).attr('font-size', 'var(--chart-secondary)').attr('font-weight', 700).attr('fill', ink).text(fmt(ve));
       });
     }
 
@@ -1004,7 +1024,7 @@ svg a .trace-ref { cursor:pointer; }
       ['Concerned about accuracy', 3],
       ['Privacy / data concerns', 2]
     ];
-    var n = 15, W = 420, labelW = 168, barMax = 130, barH = 40;
+    var n = 15, W = 460, labelW = 230, barMax = 130, barH = 52;
     var H = bars.length * barH;
 
     var svg = d3.select(el).append('svg')
@@ -1015,56 +1035,56 @@ svg a .trace-ref { cursor:pointer; }
     bars.forEach(function (b, i) {
       var y = i * barH;
       var r = svg.append('g').attr('transform', 'translate(0,' + y + ')');
-      r.append('text').attr('x', 0).attr('y', barH / 2 + 5).attr('font-size', 12).attr('fill', ink).text(b[0]);
+      r.append('text').attr('x', 0).attr('y', barH / 2 + 5).attr('font-size', 'var(--chart-label)').attr('fill', ink).text(b[0]);
       var w = (b[1] / n) * barMax;
-      r.append('rect').attr('x', labelW).attr('y', 8).attr('width', w).attr('height', 14).attr('fill', g2);
-      r.append('text').attr('x', labelW + w + 8).attr('y', barH / 2 + 5).attr('font-size', 12).attr('fill', ink).text(b[1] + ' (' + (100 * b[1] / n).toFixed(0) + '%)');
+      r.append('rect').attr('x', labelW).attr('y', 12).attr('width', w).attr('height', 18).attr('fill', g2);
+      r.append('text').attr('x', labelW + w + 8).attr('y', barH / 2 + 5).attr('font-size', 'var(--chart-label)').attr('fill', ink).text(b[1] + ' (' + (100 * b[1] / n).toFixed(0) + '%)');
     });
   });
 
   /* ---- Q19 overall preference: butterfly + legend (Slide 7, right) ---- */
   App.mount('s-06-pref', function (el) {
     var data = [['External AI', 4, '#c25e4c'], ['XJTLU AI', 1, '#1683a5'], ['About the same', 1, '#89989e'], ['Unable to compare', 1, '#b5c0c3']];
-    var svg = d3.select(el).append('svg').attr('viewBox', '0 0 470 210').attr('role','img').attr('aria-label','Overall preference: external 4, XJTLU 1, same 1, unable 1 of 7');
-    data.forEach(function(d,i) { var y=15+i*44; svg.append('text').attr('x',0).attr('y',y+19).attr('font-size',15).attr('fill','#172327').text(d[0]); svg.append('rect').attr('x',170).attr('y',y).attr('width',d[1]*48).attr('height',23).attr('fill',d[2]).attr('rx',3); svg.append('text').attr('x',180+d[1]*48).attr('y',y+18).attr('font-size',15).attr('font-weight',700).text(d[1]+' / 7'); });
+    var svg = d3.select(el).append('svg').attr('viewBox', '0 0 420 220').attr('role','img').attr('aria-label','Overall preference: external 4, XJTLU 1, same 1, unable 1 of 7');
+    data.forEach(function(d,i) { var y=15+i*49; svg.append('text').attr('x',0).attr('y',y+19).attr('font-size', 'var(--chart-label)').attr('fill','#172327').text(d[0]); svg.append('rect').attr('x',184).attr('y',y).attr('width',d[1]*42).attr('height',23).attr('fill',d[2]).attr('rx',3); svg.append('text').attr('x',194+d[1]*42).attr('y',y+18).attr('font-size', 'var(--chart-label)').attr('font-weight',700).text(d[1]+' / 7'); });
   });
 
   /* ---- matched pairs (Slide 7) ---- */
   App.mount('s-07-paired', function (el) {
     var cX = '#1683a5', cE = '#c25e4c', ink = '#172327', muted = '#687780';
     var pairs = [[2, 2], [5, 5], [1, 2], [3, 2], [4, 2]]; // [XJTLU AI, External AI]
-    var W = 1050, top = 52, rowH = 54, H = top + pairs.length * rowH + 12;
+    var W = 1050, top = 58, rowH = 60, H = top + pairs.length * rowH + 12;
     var svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H)
       .attr('role', 'img').attr('aria-label', 'Five paired campus-resource usefulness ratings. Two ties, two higher XJTLU ratings and one higher external rating.');
     function header(x, label, color) {
-      svg.append('text').attr('x',x).attr('y',25).attr('fill',color).attr('font-size',16)
+      svg.append('text').attr('x',x).attr('y',25).attr('fill',color).attr('font-size', 'var(--chart-emphasis)')
         .attr('font-weight',700).text(label);
     }
-    header(14,'Pair',ink); header(165,'XJTLU AI',cX); header(455,'External AI',cE); header(750,'Comparison',ink);
-    svg.append('text').attr('x',165).attr('y',44).attr('fill',muted).attr('font-size',12).text('Original rating · 1–5');
-    svg.append('text').attr('x',455).attr('y',44).attr('fill',muted).attr('font-size',12).text('Original rating · 1–5');
+    header(14,'#',ink); header(165,'XJTLU AI',cX); header(455,'External AI',cE); header(750,'Difference',ink);
+    svg.append('text').attr('x',165).attr('y',44).attr('fill',muted).attr('font-size', 'var(--chart-label)').text('Original rating · 1–5');
+    svg.append('text').attr('x',455).attr('y',44).attr('fill',muted).attr('font-size', 'var(--chart-label)').text('Original rating · 1–5');
+    svg.append('text').attr('x',750).attr('y',44).attr('fill',muted).attr('font-size', 'var(--chart-label)').text('XJTLU AI − External AI');
     function rating(row, x, y, value, color, className) {
-      row.append('text').attr('class',className).attr('x',x).attr('y',y+6).attr('font-size',21)
-        .attr('font-weight',700).attr('fill',color).text(value + ' / 5');
+      row.append('text').attr('class',className).attr('x',x).attr('y',y+6).attr('font-size', 'var(--chart-emphasis)')
+        .attr('font-weight',700).attr('fill',color).text(value);
       for (var score=1; score<=5; score++) {
-        row.append('circle').attr('cx',x+92+(score-1)*22).attr('cy',y).attr('r',7)
-          .attr('fill',score===value ? color : '#fff').attr('stroke',score===value ? color : '#aebdc1').attr('stroke-width',1.5);
+        row.append('circle').attr('cx',x+44+(score-1)*22).attr('cy',y).attr('r',7)
+          .attr('fill',score<=value ? color : '#fff').attr('stroke',score<=value ? color : '#aebdc1').attr('stroke-width',1.5);
       }
     }
     pairs.forEach(function(p,i) {
       var y=top+i*rowH+rowH/2, diff=p[0]-p[1];
-      var result=diff===0 ? 'Same rating' : (diff>0 ? 'XJTLU higher' : 'External higher');
-      var amount=diff===0 ? '' : ' · ' + Math.abs(diff) + (Math.abs(diff)===1 ? ' point' : ' points');
+      var result=diff===0 ? '0 · Same' : (diff>0 ? '+'+diff+' · XJTLU AI higher' : '−'+Math.abs(diff)+' · External AI higher');
       var color=diff===0 ? ink : (diff>0 ? cX : cE);
       var row=svg.append('g').attr('class','pair-row').attr('tabindex',0).attr('role','img')
-        .attr('aria-label','Pair '+(i+1)+': XJTLU '+p[0]+' out of 5, external '+p[1]+' out of 5. '+result+amount);
+        .attr('aria-label','Pair '+(i+1)+': XJTLU AI '+p[0]+' out of 5, External AI '+p[1]+' out of 5. Difference: '+result);
       var base=i%2===0?'#f3f6f6':'#fff';
       var bg=row.append('rect').attr('class','pair-background').attr('x',0).attr('y',top+i*rowH).attr('width',W).attr('height',rowH).attr('fill',base);
       row.on('mouseenter focusin',function(){bg.attr('fill','#dceef3');}).on('mouseleave focusout',function(){bg.attr('fill',base);});
-      row.append('text').attr('x',14).attr('y',y+6).attr('font-size',16).attr('fill',ink).text('Pair '+(i+1));
+      row.append('text').attr('x',14).attr('y',y+6).attr('font-size', 'var(--chart-label)').attr('fill',ink).text(i+1);
       rating(row,165,y,p[0],cX,'raw-rating raw-xjtl');
       rating(row,455,y,p[1],cE,'raw-rating raw-external');
-      row.append('text').attr('x',750).attr('y',y+6).attr('font-size',16).attr('font-weight',700).attr('fill',color).text(result+amount);
+      row.append('text').attr('x',750).attr('y',y+6).attr('font-size', 'var(--chart-label)').attr('font-weight',700).attr('fill',color).text(result);
     });
   });
 
@@ -1072,10 +1092,10 @@ svg a .trace-ref { cursor:pointer; }
   App.mount('s-05-observed', function(el) {
     var svg=d3.select(el).select('svg'), bg=svg.select('g[aria-hidden="true"]');
     var rows=bg.selectAll('rect').data(d3.range(6)).join('rect').attr('class','rating-row-background')
-      .attr('x',0).attr('y',function(i){return 51+i*53;}).attr('width',1080).attr('height',53)
+      .attr('x',0).attr('y',function(i){return 51+i*64;}).attr('width',1080).attr('height',64)
       .attr('fill',function(i){return i%2===0?'#f4f7f7':'#fff';});
     svg.on('pointermove',function(event){
-      var y=d3.pointer(event,this)[1], row=Math.floor((y-51)/53);
+      var y=d3.pointer(event,this)[1], row=Math.floor((y-51)/64);
       rows.attr('fill',function(i){return i===row?'#dceef3':(i%2===0?'#f4f7f7':'#fff');});
     }).on('pointerleave',function(){rows.attr('fill',function(i){return i%2===0?'#f4f7f7':'#fff';});});
   });
@@ -1101,12 +1121,12 @@ svg a .trace-ref { cursor:pointer; }
       {name:'Privacy and course context', ids:['PRIVACY_CONCERN','WANT_COURSE_AWARE','WANT_INTERNAL_DATA'], note:'Course-specific support and privacy considerations. Privacy was also an option in the survey; the interview adds context.'},
       {name:'Desired support', ids:['WANT_STATS_SPSS','WANT_ACCURACY_SPEED'], note:'Requested statistics or calculation support and accurate, timely responses.'}
     ];
-    var W=480, labelW=235, barMax=155, rowH=36;
+    var W=480, labelW=255, barMax=140, rowH=40;
     var svg=d3.select(el).append('svg').attr('viewBox','0 0 '+W+' '+(top.length*rowH)).attr('role','img').attr('aria-label','Top interview codes; selected participant or theme is highlighted');
     var rows=svg.selectAll('g.code-row').data(top).enter().append('g').attr('class','code-row').attr('data-code',function(d){return d[0];}).attr('transform',function(d,i){return 'translate(0,'+(i*rowH)+')';});
-    rows.append('text').attr('x',0).attr('y',23).attr('font-size',14).attr('fill','#172327').text(function(d){return d[1];});
+    rows.append('text').attr('x',0).attr('y',25).attr('font-size', 'var(--chart-label)').attr('fill','#172327').text(function(d){return d[1];});
     rows.append('rect').attr('x',labelW).attr('y',9).attr('width',function(d){return d[2]/6*barMax;}).attr('height',15).attr('fill','#1683a5').attr('rx',3);
-    rows.append('text').attr('x',function(d){return labelW+d[2]/6*barMax+8;}).attr('y',23).attr('font-size',14).attr('font-weight',700).attr('fill','#172327').text(function(d){return d[2];});
+    rows.append('text').attr('x',function(d){return labelW+d[2]/6*barMax+8;}).attr('y',25).attr('font-size', 'var(--chart-label)').attr('font-weight',700).attr('fill','#172327').text(function(d){return d[2];});
     function highlight(ids) {
       var set=new Set(ids||[]), visible=top.filter(function(d){return set.has(d[0]);});
       rows.classed('selected',function(d){return set.has(d[0]);}).classed('dimmed',function(d){return visible.length > 0 && !set.has(d[0]);});
