@@ -55,6 +55,9 @@ nav ol > li { counter-increment:section-link }
 nav a { display:grid; grid-template-columns:1.65rem minmax(0,1fr); align-items:baseline; min-height:2.16rem; padding:.35rem .4rem; color:var(--ink); text-decoration:none; font-size:.83rem; line-height:1.42 }
 nav a::before { content:counter(section-link,decimal-leading-zero); color:var(--muted); font-size:.71rem; font-variant-numeric:tabular-nums }
 nav a:hover { background:var(--tint); color:var(--link) }
+.presentation-links { display:flex; flex:none; gap:.4rem; padding:.55rem .4rem; border-bottom:1px solid var(--line) }
+.presentation-links a { display:flex; align-items:center; gap:.28rem; color:var(--link); font-weight:675 }
+.presentation-links a::before { content:none }
 main { min-width:0 }
 section { padding:2.25rem 0 1.55rem }
 #overview { padding-top:1.2rem }
@@ -317,6 +320,10 @@ nav .contents-more a::before { content:none }
 <span>ADS401 · Evaluation Methods and Statistics</span>
 <span>Xi’an Jiaotong-Liverpool University</span>
 </div>
+<nav class="presentation-links" aria-label="Project presentations">
+<a href="/ads401/pre2/" target="_blank" rel="noopener" aria-label="Pre2 project report (opens in a new tab)">Pre2 <span aria-hidden="true">↗</span></a>
+<a href="/ads401/pre3/" target="_blank" rel="noopener" aria-label="Pre3 data story (opens in a new tab)">Pre3 <span aria-hidden="true">↗</span></a>
+</nav>
 <nav aria-label="Report contents"><strong>Contents</strong><ol>
 <li><a href="#overview">Introduction</a></li><li><a href="#questions">Research questions</a></li><li><a href="#background">Related work and rationale</a></li><li><a href="#design">System and evaluation design</a></li><li><a href="#analysis">Data preparation and analysis</a></li><li><a href="#findings">Findings</a></li><li><a href="#discussion">Discussion and recommendations</a></li><li><a href="#transparency">Transparency</a></li><li><a href="#references">References</a></li><li><a href="#materials">Materials</a></li>
 </ol>

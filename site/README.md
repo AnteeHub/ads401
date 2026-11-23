@@ -1,8 +1,9 @@
 # ADS401 Group A site
 
-The Astro site builds three routes under the configured `/ads401` base path:
+The Astro site builds four routes under the configured `/ads401` base path:
 
-- `/` — project entry and presentation menu.
+- `/` — full project report rendered from `src/pages/report/index.html`.
+- `/report/` — direct link to the same report.
 - `/pre2/` — archived report, with its route in `src/pages/pre2/` and content in `src/content/report.md`.
 - `/pre3/` — interactive presentation, with its route and source in `src/pages/pre3/`.
 
