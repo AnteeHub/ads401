@@ -55,6 +55,7 @@ nav ol > li { counter-increment:section-link }
 nav a { display:grid; grid-template-columns:1.65rem minmax(0,1fr); align-items:baseline; min-height:2.16rem; padding:.35rem .4rem; color:var(--ink); text-decoration:none; font-size:.83rem; line-height:1.42 }
 nav a::before { content:counter(section-link,decimal-leading-zero); color:var(--muted); font-size:.71rem; font-variant-numeric:tabular-nums }
 nav a:hover { background:var(--tint); color:var(--link) }
+.sidebar nav a.active { background:var(--tint); color:var(--link); font-weight:650 }
 .presentation-links { display:flex; flex:none; gap:.4rem; padding:.55rem .4rem; border-bottom:1px solid var(--line) }
 .presentation-links a { display:flex; align-items:center; gap:.28rem; color:var(--link); font-weight:675 }
 .presentation-links a::before { content:none }
@@ -1200,6 +1201,59 @@ document.addEventListener('pointerdown', event => {
 });
 window.addEventListener('scroll', positionGroupTooltip, { capture:true, passive:true });
 window.addEventListener('resize', positionGroupTooltip);
+
+const tocLinks = Array.from(document.querySelectorAll('.sidebar nav ol a'));
+const tocTargets = tocLinks.map(link => document.getElementById(link.getAttribute('href').slice(1)));
+
+if (tocLinks.length > 0) {
+  let tocTicking = false;
+
+  const setActiveToc = activeIndex => {
+    tocLinks.forEach((link, idx) => {
+      const isActive = idx === activeIndex;
+      link.classList.toggle('active', isActive);
+      if (isActive) {
+        link.setAttribute('aria-current', 'location');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  };
+
+  const updateActiveToc = () => {
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40) {
+      setActiveToc(tocLinks.length - 1);
+      return;
+    }
+
+    let activeIndex = 0;
+    for (let i = 0; i < tocTargets.length; i++) {
+      if (tocTargets[i] && tocTargets[i].getBoundingClientRect().top <= 120) {
+        activeIndex = i;
+      } else {
+        break;
+      }
+    }
+    setActiveToc(activeIndex);
+  };
+
+  const scheduleTocUpdate = () => {
+    if (!tocTicking) {
+      tocTicking = true;
+      requestAnimationFrame(() => {
+        updateActiveToc();
+        tocTicking = false;
+      });
+    }
+  };
+
+  window.addEventListener('scroll', scheduleTocUpdate, { passive: true });
+  window.addEventListener('resize', scheduleTocUpdate, { passive: true });
+  tocLinks.forEach((link, idx) => {
+    link.addEventListener('click', () => setActiveToc(idx));
+  });
+  updateActiveToc();
+}
 
 </script>
 </body>
