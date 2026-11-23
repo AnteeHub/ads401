@@ -244,7 +244,11 @@ nav .contents-more a::before { content:none }
 .observation-records p { max-width:77ch; margin:0 }
 .q-link { color:var(--link); text-decoration:none; border-bottom:1px dotted currentColor; white-space:nowrap }
 .q-link:hover, .q-link:focus-visible { border-bottom-style:solid }
-.questionnaire [id]:target { background:var(--tint); outline:2px solid var(--line); outline-offset:3px }
+.questionnaire [id]:target, .questionnaire .q-target-highlight { background:var(--tint); outline:2px solid var(--line); outline-offset:3px }
+.back-to-reading { position:fixed; right:1.25rem; bottom:1.25rem; z-index:80; padding:.5rem .9rem; border:1px solid var(--line); border-radius:999px; background:var(--paper); color:var(--link); font:inherit; font-size:.88rem; font-weight:600; cursor:pointer; box-shadow:0 2px 10px rgba(0,0,0,.08) }
+.back-to-reading:hover { background:var(--tint) }
+.back-to-reading:focus-visible { outline:2px solid var(--link); outline-offset:2px }
+.back-to-reading[hidden] { display:none }
 .design-table td:nth-child(2) { white-space:normal }
 @media(max-width:610px) {
   .observation-photos { grid-template-columns:1fr }
@@ -267,6 +271,7 @@ nav .contents-more a::before { content:none }
   .wrap { max-width:none; padding:0 }
   .shell { display:block }
   .sidebar, .skip, .question-index, .appendix-pages, .group-tooltip { display:none }
+  .back-to-reading { display:none !important }
   .hero { padding-bottom:1.1rem; border-top:0 }
   .hero h1 { font-size:27pt; margin:.68rem 0 .33rem }
   .subtitle { font-size:12pt }
@@ -1143,6 +1148,7 @@ nav .contents-more a::before { content:none }
 <p id="group-definition-g4"><strong>XJTLU AI only</strong> <span>Used only XJTLU AI for ADS401 in the previous four weeks. 1 student.</span></p>
 </div>
 <div class="group-tooltip" id="group-tooltip" aria-hidden="true" hidden><strong></strong><span></span></div>
+<button type="button" class="back-to-reading" id="back-to-reading" hidden>Back to reading ↑</button>
 <script>
 const groupTooltip = document.getElementById('group-tooltip');
 const groupTooltipTitle = groupTooltip.querySelector('strong');
@@ -1253,6 +1259,85 @@ if (tocLinks.length > 0) {
     link.addEventListener('click', () => setActiveToc(idx));
   });
   updateActiveToc();
+}
+
+const backToReadingBtn = document.getElementById('back-to-reading');
+let questionnaireReturnState = null;
+let highlightedQuestionnaireTarget = null;
+
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function jumpToQuestionnaireTarget(target, updateHistory) {
+  if (!target) return;
+  let details = target.closest('details');
+  while (details) {
+    details.open = true;
+    details = details.parentElement ? details.parentElement.closest('details') : null;
+  }
+  if (highlightedQuestionnaireTarget && highlightedQuestionnaireTarget !== target) {
+    highlightedQuestionnaireTarget.classList.remove('q-target-highlight');
+  }
+  target.classList.add('q-target-highlight');
+  highlightedQuestionnaireTarget = target;
+  if (updateHistory && target.id) {
+    history.replaceState(null, '', '#' + target.id);
+  }
+  target.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  if (questionnaireReturnState && backToReadingBtn) {
+    backToReadingBtn.hidden = false;
+  }
+}
+
+document.addEventListener('click', event => {
+  const link = event.target.closest('a[href^="#appendix-q"], a[href^="#appendix-a-page-"]');
+  if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const href = link.getAttribute('href');
+  if (!href) return;
+  const target = document.getElementById(href.slice(1));
+  if (!target) return;
+  event.preventDefault();
+  if (!link.closest('#appendix-questionnaire, .question-index, .questionnaire')) {
+    questionnaireReturnState = { scrollY: window.scrollY, triggerEl: link };
+  }
+  jumpToQuestionnaireTarget(target, true);
+});
+
+if (backToReadingBtn) {
+  backToReadingBtn.addEventListener('click', () => {
+    const saved = questionnaireReturnState;
+    questionnaireReturnState = null;
+    backToReadingBtn.hidden = true;
+    if (highlightedQuestionnaireTarget) {
+      highlightedQuestionnaireTarget.classList.remove('q-target-highlight');
+      highlightedQuestionnaireTarget = null;
+    }
+    if (!saved) return;
+    window.scrollTo({ top: saved.scrollY, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    if (saved.triggerEl && saved.triggerEl.isConnected) {
+      saved.triggerEl.focus({ preventScroll: true });
+    }
+  });
+}
+
+function openHashTargetIfNeeded() {
+  const hash = location.hash;
+  if (!hash || hash.length < 2) return;
+  let id = hash.slice(1);
+  try { id = decodeURIComponent(id); } catch {}
+  const target = document.getElementById(id);
+  if (!target) return;
+  if (target.closest('details') || hash.startsWith('#appendix-q') || hash.startsWith('#appendix-a-page-')) {
+    jumpToQuestionnaireTarget(target, false);
+  }
+}
+
+window.addEventListener('hashchange', openHashTargetIfNeeded);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', openHashTargetIfNeeded, { once: true });
+} else {
+  openHashTargetIfNeeded();
 }
 
 </script>
